@@ -1,2093 +1,1772 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EFI Trader</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5" />
     <meta name="google-site-verification" content="jfRXCkKkBCpEjeOBcOgCJ3FqL6PvTWDRIkwYr2nx4V4" />
+    <title>EFI Trader · Premium Forex Platform</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    
     <style>
-        /* ===== ALL STYLES ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         :root {
-            --bg-primary: #0a0907;
-            --bg-secondary: #13110e;
-            --bg-card: #1a1712;
-            --bg-input: #1a1712;
-            --border-color: #2a241e;
-            --text-primary: #e8e2d9;
-            --text-secondary: #cbbca8;
-            --text-muted: #6a5f4b;
-            --accent: #d4af37;
-            --accent-bg: #d4af3720;
-            --accent-border: #d4af3740;
-            --whatsapp: #25D366;
-            --profit: #4caf50;
-            --loss: #f44336;
-            --warning: #ff9800;
-            --jazzcash: #1a8a3c;
-            --upaisa: #e31e24;
+            --navy: #0A1628;
+            --cream: #F8F6F0;
+            --gold: #C9A84C;
+            --gold-warm: #E8C96E;
+            --pearl: #F0EDE6;
+            --text-dark: #1A1A2E;
+            --text-light: #F0EDE6;
+            --shadow: 0 20px 60px rgba(0,0,0,0.3);
+            --shadow-gold: 0 8px 30px rgba(201,168,76,0.2);
+            --radius: 24px;
+            --radius-sm: 16px;
+            --transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
         }
 
-        [data-theme="light"] {
-            --bg-primary: #f5f0e8;
-            --bg-secondary: #ffffff;
-            --bg-card: #faf8f4;
-            --bg-input: #f0ece4;
-            --border-color: #d4c8b8;
-            --text-primary: #1a1712;
-            --text-secondary: #3d352b;
-            --text-muted: #7a6e5c;
-            --accent: #b8960f;
-            --accent-bg: #d4af3720;
-            --accent-border: #d4af3760;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            transition: background 0.3s, color 0.3s, border-color 0.3s;
-        }
-
+        html { scroll-behavior: smooth; }
+        
         body {
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            background: var(--navy);
+            color: var(--text-light);
+            transition: background 0.4s, color 0.3s;
+            line-height: 1.6;
+            overflow-x: hidden;
         }
 
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: var(--bg-secondary); }
-        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 8px; }
+        body.light {
+            background: var(--cream);
+            color: var(--text-dark);
+        }
 
-        .app { max-width: 1200px; margin: 0 auto; padding: 12px 20px; }
+        body.light .nav-blur {
+            background: rgba(248,246,240,0.92);
+            border-bottom: 1px solid rgba(201,168,76,0.12);
+        }
 
-        /* ===== HEADER ===== */
-        .header {
-            display: flex;
-            justify-content: space-between;
+        body.light .book-card,
+        body.light .journey-card,
+        body.light .community-box,
+        body.light .social-card,
+        body.light .admin-panel,
+        body.light .signal-box,
+        body.light .journey-form,
+        body.light .category-card,
+        body.light .chart-card {
+            background: rgba(255,255,255,0.7);
+            border: 1px solid rgba(201,168,76,0.1);
+        }
+
+        body.light .section-alt { background: rgba(201,168,76,0.04); }
+        body.light .footer { border-top: 1px solid rgba(201,168,76,0.1); }
+        body.light .footer-link { color: var(--text-dark); }
+        body.light .btn-secondary { color: var(--text-dark); border-color: rgba(201,168,76,0.2); }
+        body.light .btn-secondary:hover { color: var(--gold); border-color: var(--gold); }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+        .text-gold { color: var(--gold); }
+
+        /* ===== BUTTONS ===== */
+        .btn-primary {
+            display: inline-flex;
             align-items: center;
-            flex-wrap: wrap;
-            border-bottom: 2px solid var(--accent-border);
-            padding-bottom: 12px;
-            margin-bottom: 16px;
             gap: 10px;
-        }
-
-        .logo-area {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
+            background: linear-gradient(135deg, var(--gold), var(--gold-warm));
+            color: var(--navy);
+            font-weight: 600;
+            padding: 14px 36px;
+            border-radius: 100px;
+            border: none;
             cursor: pointer;
+            transition: var(--transition);
+            font-size: 16px;
+            box-shadow: var(--shadow-gold);
+            text-decoration: none;
         }
+        .btn-primary:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 12px 40px rgba(201,168,76,0.35); }
 
-        .brand {
-            font-size: 26px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #f5e7b0, var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: transparent;
+            color: var(--pearl);
+            font-weight: 500;
+            padding: 14px 36px;
+            border-radius: 100px;
+            border: 1.5px solid rgba(201,168,76,0.25);
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 16px;
+            text-decoration: none;
         }
+        .btn-secondary:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); background: rgba(201,168,76,0.05); }
 
-        .brand-sub {
-            color: var(--text-muted);
-            font-size: 13px;
-            border-left: 1px solid var(--accent-border);
-            padding-left: 10px;
+        .btn-whatsapp {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #25D366;
+            color: white;
+            font-weight: 600;
+            padding: 14px 32px;
+            border-radius: 100px;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 15px;
+            text-decoration: none;
         }
+        .btn-whatsapp:hover { transform: scale(1.04); box-shadow: 0 8px 30px rgba(37,211,102,0.3); }
 
-        .header-actions {
-            display: flex;
+        .btn-back {
+            display: inline-flex;
             align-items: center;
             gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .theme-toggle {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
-            padding: 5px 12px;
-            border-radius: 30px;
+            background: transparent;
+            border: none;
+            color: var(--gold);
+            font-size: 14px;
             cursor: pointer;
-            font-size: 16px;
-            transition: 0.3s;
+            transition: var(--transition);
+            padding: 8px 16px;
+            border-radius: 8px;
         }
-        .theme-toggle:hover { border-color: var(--accent); }
+        .btn-back:hover { background: rgba(201,168,76,0.08); }
 
-        .search-box {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 30px;
-            padding: 4px 12px;
+        /* ===== NAV ===== */
+        .nav-blur {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(10,22,40,0.88);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(201,168,76,0.06);
+            padding: 14px 0;
+            transition: var(--transition);
+        }
+        .nav-inner { display: flex; justify-content: space-between; align-items: center; }
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--gold);
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            user-select: none;
+        }
+        .logo span { color: var(--pearl); font-weight: 300; }
+        .nav-actions { display: flex; align-items: center; gap: 16px; }
+        .nav-btn {
+            background: transparent;
+            border: none;
+            color: var(--pearl);
+            font-size: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            opacity: 0.5;
+            padding: 8px;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .nav-btn:hover { opacity: 1; color: var(--gold); background: rgba(201,168,76,0.08); }
+        .lang-btn {
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            background: rgba(201,168,76,0.1);
+            color: var(--gold);
+            padding: 6px 16px;
+            border-radius: 100px;
+            border: 1px solid rgba(201,168,76,0.15);
+            cursor: pointer;
+            transition: var(--transition);
+            letter-spacing: 0.5px;
+        }
+        .lang-btn:hover { background: rgba(201,168,76,0.2); transform: scale(1.05); }
+
+        /* ===== HERO ===== */
+        .hero {
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            padding: 120px 0 40px;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -40%;
+            right: -10%;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(201,168,76,0.05) 0%, transparent 70%);
+            animation: heroGlow 10s ease-in-out infinite alternate;
+        }
+        @keyframes heroGlow {
+            0% { transform: scale(1) translate(0,0); opacity: 0.3; }
+            100% { transform: scale(1.3) translate(-60px,60px); opacity: 0.8; }
+        }
+        .hero-grid {
+            position: relative;
+            z-index: 1;
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(201,168,76,0.1);
+            color: var(--gold);
+            padding: 6px 20px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+            border: 1px solid rgba(201,168,76,0.1);
+        }
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 48px;
+            line-height: 1.08;
+            margin-bottom: 16px;
+        }
+        .hero-title .highlight { color: var(--gold); position: relative; }
+        .hero-title .highlight::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--gold);
+            opacity: 0.3;
+            border-radius: 4px;
+        }
+        .hero-desc {
+            font-size: 18px;
+            opacity: 0.65;
+            max-width: 600px;
+            margin: 0 auto 24px;
+            line-height: 1.8;
+        }
+        .hero-stats {
+            display: flex;
+            gap: 48px;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(201,168,76,0.06);
+            justify-content: center;
+        }
+        .stat-item .number {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--gold);
+        }
+        .stat-item .label { font-size: 13px; opacity: 0.4; }
+
+        /* ==========================================
+           PAGE SYSTEM
+           ========================================== */
+        .page-container {
+            display: none;
+            padding: 100px 0 60px;
+        }
+        .page-container.active {
+            display: block;
+            animation: fadeUp 0.4s ease;
+        }
+        .page-container .page-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .page-container .page-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 30px;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ==========================================
+           BOOKS - SEPARATE CARDS
+           ========================================== */
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+            margin-top: 16px;
+        }
+
+        .book-card {
+            background: rgba(26,26,46,0.25);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(201,168,76,0.06);
+            border-radius: var(--radius);
+            padding: 24px;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+        }
+        .book-card:hover {
+            border-color: rgba(201,168,76,0.15);
+            transform: translateY(-4px);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.15);
+        }
+        .book-card .book-icon {
+            font-size: 40px;
+            color: var(--gold);
+            margin-bottom: 12px;
+        }
+        .book-card .book-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        .book-card .book-desc {
+            opacity: 0.5;
+            font-size: 14px;
+            line-height: 1.6;
+            flex: 1;
+            margin-bottom: 12px;
+        }
+        .book-card .book-meta {
+            font-size: 12px;
+            opacity: 0.3;
+            margin-bottom: 12px;
+        }
+        .book-card .book-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-top: auto;
+        }
+        .book-card .book-actions .pdf-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(201,168,76,0.08);
+            border: 1px solid rgba(201,168,76,0.12);
+            color: var(--gold);
+            padding: 8px 18px;
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+        .book-card .book-actions .pdf-btn:hover {
+            background: rgba(201,168,76,0.15);
+            transform: scale(1.02);
+        }
+        .book-card .book-actions .delete-btn {
+            background: transparent;
+            border: none;
+            color: #ff6b6b;
+            opacity: 0.3;
+            cursor: pointer;
+            font-size: 14px;
+            transition: var(--transition);
+            padding: 6px 12px;
+            border-radius: 8px;
+        }
+        .book-card .book-actions .delete-btn:hover {
+            opacity: 1;
+            background: rgba(255,107,107,0.08);
+        }
+        .book-card.admin-hidden .delete-btn { display: none; }
+
+        /* ==========================================
+           TRADING JOURNEY - SOCIAL FEED STYLE
+           ========================================== */
+        .journey-feed {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            margin-top: 16px;
+        }
+
+        .journey-card {
+            background: rgba(26,26,46,0.25);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(201,168,76,0.06);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+        .journey-card:hover {
+            border-color: rgba(201,168,76,0.12);
+        }
+        .journey-card .post-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 20px 8px 20px;
+        }
+        .journey-card .post-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--gold), var(--gold-warm));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+            color: var(--navy);
+            flex-shrink: 0;
+        }
+        .journey-card .post-user {
+            font-weight: 600;
+            font-size: 15px;
+        }
+        .journey-card .post-time {
+            font-size: 12px;
+            opacity: 0.35;
+        }
+        .journey-card .post-image {
+            width: 100%;
+            max-height: 500px;
+            object-fit: cover;
+            background: rgba(201,168,76,0.04);
+            display: block;
+        }
+        .journey-card .post-image-placeholder {
+            width: 100%;
+            height: 200px;
+            background: rgba(201,168,76,0.04);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold);
+            font-size: 48px;
+            opacity: 0.2;
+        }
+        .journey-card .post-description {
+            padding: 16px 20px 12px 20px;
+            font-size: 15px;
+            line-height: 1.8;
+        }
+        .journey-card .post-actions {
+            padding: 0 20px 16px 20px;
+            display: flex;
+            gap: 16px;
+            border-top: 1px solid rgba(201,168,76,0.04);
+            padding-top: 12px;
+        }
+        .journey-card .post-actions button {
+            background: transparent;
+            border: none;
+            color: var(--pearl);
+            opacity: 0.3;
+            cursor: pointer;
+            font-size: 13px;
+            transition: var(--transition);
             display: flex;
             align-items: center;
             gap: 6px;
         }
-        .search-box input {
-            background: transparent;
-            border: none;
-            color: var(--text-primary);
-            padding: 5px 0;
-            outline: none;
-            font-size: 13px;
-            width: 120px;
+        .journey-card .post-actions button:hover {
+            opacity: 1;
+            color: var(--gold);
         }
-        .search-box input::placeholder { color: var(--text-muted); }
-        .search-box button {
-            background: none;
-            border: none;
-            color: var(--accent);
-            font-size: 15px;
-            cursor: pointer;
+        .journey-card .post-actions .delete-btn:hover {
+            color: #ff6b6b;
         }
+        .journey-card.admin-hidden .delete-btn { display: none; }
 
-        /* ===== TABS ===== */
-        .tabs {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-bottom: 16px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 10px;
-        }
-
-        .nav-tab {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            color: var(--text-secondary);
-            padding: 6px 16px;
-            border-radius: 30px;
-            cursor: pointer;
-            font-size: 13px;
-            transition: 0.3s;
-        }
-        .nav-tab:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-        }
-        .nav-tab.active {
-            background: var(--accent-bg);
-            border-color: var(--accent);
-            color: var(--accent);
-        }
-
-        .tab-content {
+        /* ==========================================
+           ADMIN PANEL
+           ========================================== */
+        .admin-panel {
             display: none;
-            animation: fadeIn 0.3s ease;
+            background: rgba(26,26,46,0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(201,168,76,0.06);
+            border-radius: var(--radius);
+            padding: 28px;
+            margin-top: 32px;
+            transition: var(--transition);
         }
-        .tab-content.active { display: block; }
-
-        @keyframes fadeIn {
-            0% { opacity: 0.4; transform: translateY(6px); }
-            100% { opacity: 1; transform: translateY(0); }
+        .admin-panel.active {
+            display: block;
+            animation: fadeUp 0.4s ease;
         }
-
-        /* ===== BOOK SECTION ===== */
-        .main-grid {
-            display: grid;
-            grid-template-columns: 260px 1fr;
-            gap: 20px;
-        }
-
-        .sidebar {
-            background: var(--bg-secondary);
-            border-radius: 16px;
-            border: 1px solid var(--border-color);
-            padding: 14px;
-            height: fit-content;
-            position: sticky;
-            top: 16px;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-
-        .sidebar-title {
-            color: var(--accent);
-            font-size: 16px;
-            font-weight: 600;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 8px;
-            margin-bottom: 10px;
-        }
-
-        .book-list {
-            list-style: none;
-        }
-        .book-list li {
-            padding: 8px 12px;
-            margin-bottom: 3px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.3s;
-            color: var(--text-secondary);
-            font-size: 13px;
-            border-left: 3px solid transparent;
-        }
-        .book-list li:hover {
-            background: var(--bg-card);
-            border-left-color: var(--accent);
-            color: var(--text-primary);
-        }
-        .book-list li.active {
-            background: var(--accent-bg);
-            border-left-color: var(--accent);
-            color: var(--accent);
-            font-weight: 600;
-        }
-        .book-list li .badge {
-            background: var(--accent-bg);
-            color: var(--accent);
-            font-size: 10px;
-            padding: 1px 8px;
-            border-radius: 20px;
-            margin-left: 6px;
-        }
-        .book-list li .price-tag {
-            color: var(--profit);
-            font-size: 11px;
-            margin-left: 6px;
-            font-weight: 600;
-        }
-        .book-list li .free-tag {
-            color: var(--whatsapp);
-            font-size: 11px;
-            margin-left: 6px;
-            font-weight: 600;
-        }
-
-        .content-area {
-            background: var(--bg-secondary);
-            border-radius: 16px;
-            border: 1px solid var(--border-color);
-            padding: 20px;
-            min-height: 500px;
-        }
-
-        /* ===== JOURNEY POSTS ===== */
-        .journey-post {
-            background: var(--bg-card);
-            border-radius: 14px;
-            padding: 16px;
-            margin-bottom: 14px;
-            border: 1px solid var(--border-color);
-        }
-        .journey-post .post-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
+        .admin-panel h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
             margin-bottom: 8px;
         }
-        .journey-post .post-header .date {
-            color: var(--accent);
-            font-size: 14px;
-            font-weight: 600;
-        }
-        .journey-post .post-header .day {
-            color: var(--text-muted);
+        .admin-panel .admin-sub { opacity: 0.35; margin-bottom: 16px; font-size: 14px; }
+        .admin-panel .admin-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+        .admin-panel .admin-btn {
+            padding: 10px 22px;
+            border-radius: 100px;
+            border: 1px solid rgba(201,168,76,0.1);
+            background: transparent;
+            color: var(--pearl);
+            cursor: pointer;
+            transition: var(--transition);
             font-size: 13px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
-        .journey-post .screenshot {
-            margin: 10px 0;
-            border-radius: 10px;
-            overflow: hidden;
-            background: var(--bg-primary);
-            text-align: center;
-        }
-        .journey-post .screenshot img {
-            width: 100%;
-            max-height: 500px;
-            object-fit: contain;
-            border-radius: 8px;
-        }
-        .journey-post .screenshot .no-image {
-            padding: 30px;
-            color: var(--text-muted);
-            font-size: 14px;
-            border: 1px dashed var(--border-color);
-            border-radius: 8px;
-        }
-        .journey-post .description {
-            color: var(--text-secondary);
-            line-height: 1.7;
-            margin: 8px 0;
-            white-space: pre-wrap;
-        }
+        .admin-panel .admin-btn:hover { background: rgba(201,168,76,0.08); border-color: var(--gold); color: var(--gold); }
+        .admin-panel .admin-btn.danger:hover { background: rgba(255,107,107,0.08); border-color: #ff6b6b; color: #ff6b6b; }
 
-        /* ===== SIGNAL GROUP ===== */
-        .signal-lock {
-            text-align: center;
-            padding: 40px 20px;
-            background: var(--bg-card);
-            border-radius: 16px;
-            border: 2px solid var(--accent-border);
-        }
-        .signal-lock .lock-icon { font-size: 48px; margin-bottom: 12px; }
-        .signal-lock h3 { color: var(--accent); margin-bottom: 8px; }
-        .signal-lock p { color: var(--text-muted); margin-bottom: 16px; }
-        .signal-lock .whatsapp-btn {
-            display: inline-block;
-            background: var(--whatsapp);
-            color: #fff;
-            padding: 12px 32px;
-            border-radius: 30px;
-            font-weight: 600;
-            font-size: 16px;
-            transition: 0.3s;
-            text-decoration: none;
-        }
-        .signal-lock .whatsapp-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 20px var(--whatsapp)40;
-        }
-
-        .signal-post {
-            background: var(--bg-card);
-            border-radius: 14px;
-            padding: 16px;
-            margin-bottom: 12px;
-            border-left: 4px solid var(--accent);
-        }
-        .signal-post .signal-meta {
-            display: flex;
-            justify-content: space-between;
-            color: var(--text-muted);
-            font-size: 12px;
-        }
-        .signal-post .signal-details .pair {
-            color: var(--accent);
-            font-weight: 700;
-            font-size: 18px;
-        }
-        .signal-post .signal-details .entry { color: var(--profit); }
-        .signal-post .signal-details .sl { color: var(--loss); }
-        .signal-post .signal-details .tp { color: var(--warning); }
-
-        /* ===== SUBSCRIPTION PLANS ===== */
-        .plans-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            margin: 20px 0;
-        }
-
-        .plan-card {
-            background: var(--bg-card);
-            border: 2px solid var(--border-color);
-            border-radius: 16px;
-            padding: 24px;
-            text-align: center;
-            transition: 0.3s;
-        }
-        .plan-card:hover {
-            border-color: var(--accent);
-            transform: translateY(-4px);
-        }
-        .plan-card.featured {
-            border-color: var(--accent);
-            box-shadow: 0 0 30px var(--accent-bg);
-        }
-        .plan-card .plan-icon { font-size: 36px; margin-bottom: 8px; }
-        .plan-card .plan-title { font-size: 20px; font-weight: 700; color: var(--text-primary); }
-        .plan-card .plan-price {
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--accent);
-            margin: 8px 0;
-        }
-        .plan-card .plan-price small { font-size: 14px; color: var(--text-muted); }
-        .plan-card .plan-features {
-            list-style: none;
-            text-align: left;
-            margin: 12px 0;
-            padding: 0;
-        }
-        .plan-card .plan-features li {
-            padding: 4px 0;
-            color: var(--text-secondary);
-            font-size: 14px;
-        }
-        .plan-card .plan-features li::before { content: "✅ "; }
-        .plan-card .plan-btn {
-            display: inline-block;
-            background: var(--accent);
-            color: #0a0907;
-            padding: 10px 32px;
-            border-radius: 30px;
-            font-weight: 600;
-            font-size: 14px;
-            border: none;
-            cursor: pointer;
-            transition: 0.3s;
-            width: 100%;
-        }
-        .plan-card .plan-btn:hover {
-            transform: scale(1.02);
-            box-shadow: 0 0 20px var(--accent-border);
-        }
-        .plan-card .plan-btn.whatsapp-btn {
-            background: var(--whatsapp);
-            color: #fff;
-        }
-        .plan-card .plan-btn.whatsapp-btn:hover {
-            box-shadow: 0 0 20px var(--whatsapp)40;
-        }
-
-        /* ===== SOCIAL MEDIA ===== */
-        .social-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-            margin: 16px 0;
-        }
-        .social-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
+        .admin-panel .admin-form {
+            background: rgba(26,26,46,0.2);
+            border: 1px solid rgba(201,168,76,0.06);
+            border-radius: var(--radius-sm);
             padding: 20px;
-            text-align: center;
-            transition: 0.3s;
-            cursor: pointer;
-        }
-        .social-card:hover {
-            border-color: var(--accent);
-            transform: translateY(-3px);
-        }
-        .social-card .social-icon { font-size: 40px; margin-bottom: 8px; }
-        .social-card .social-name { font-weight: 600; color: var(--text-primary); }
-        .social-card .social-status {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-top: 4px;
-        }
-        .social-card .social-status.available { color: var(--profit); }
-        .social-card .social-status.coming { color: var(--warning); }
-        .social-card .social-status.embed { color: var(--accent); }
-
-        .social-embed {
-            margin-top: 20px;
-            background: var(--bg-card);
-            border-radius: 12px;
-            padding: 20px;
-            border: 1px solid var(--border-color);
-        }
-
-        /* ===== PAYMENT POPUP ===== */
-        .payment-overlay {
+            margin-top: 16px;
             display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
         }
-        .payment-overlay.show { display: flex; }
-
-        .payment-popup {
-            background: var(--bg-secondary);
-            border: 2px solid var(--accent);
-            border-radius: 24px;
-            padding: 32px;
-            max-width: 480px;
-            width: 92%;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        .payment-popup h2 { color: var(--accent); text-align: center; margin-bottom: 8px; }
-        .payment-popup .book-name { color: var(--text-secondary); text-align: center; margin-bottom: 16px; }
-        .payment-popup .price {
-            text-align: center;
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--accent);
-            margin-bottom: 16px;
-        }
-
-        .payment-methods {
-            display: grid;
-            gap: 12px;
-            margin: 16px 0;
-        }
-        .payment-method {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 14px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .payment-method .icon { font-size: 28px; }
-        .payment-method .details { flex: 1; }
-        .payment-method .details .name { font-weight: 600; color: var(--text-primary); }
-        .payment-method .details .number { color: var(--accent); font-size: 16px; font-weight: 700; }
-        .payment-method .details .holder { color: var(--text-muted); font-size: 13px; }
-        .payment-method.jazzcash { border-left: 4px solid var(--jazzcash); }
-        .payment-method.upaisa { border-left: 4px solid var(--upaisa); }
-
-        .payment-steps {
-            background: var(--bg-card);
-            border-radius: 12px;
-            padding: 14px;
-            margin: 12px 0;
-        }
-        .payment-steps h4 { color: var(--text-secondary); margin-bottom: 8px; }
-        .payment-steps ol {
-            color: var(--text-muted);
-            font-size: 14px;
-            padding-left: 20px;
-            line-height: 1.8;
-        }
-
-        .payment-popup .whatsapp-btn {
+        .admin-panel .admin-form.active { display: block; animation: fadeUp 0.3s ease; }
+        .admin-panel .admin-form label {
             display: block;
-            background: var(--whatsapp);
-            color: #fff;
-            padding: 12px;
-            border-radius: 30px;
-            font-weight: 600;
-            font-size: 16px;
-            border: none;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 12px;
-            transition: 0.3s;
-            text-align: center;
-            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 4px;
+            opacity: 0.5;
         }
-        .payment-popup .whatsapp-btn:hover {
-            transform: scale(1.02);
-            box-shadow: 0 0 20px var(--whatsapp)40;
-        }
-        .payment-popup .close-payment {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
-            padding: 10px;
-            border-radius: 30px;
-            cursor: pointer;
+        .admin-panel .admin-form input,
+        .admin-panel .admin-form textarea {
             width: 100%;
-            margin-top: 8px;
+            padding: 12px 16px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(201,168,76,0.08);
+            border-radius: 12px;
+            color: var(--pearl);
+            font-family: 'Inter', sans-serif;
             font-size: 14px;
-            transition: 0.3s;
+            transition: var(--transition);
+            margin-bottom: 12px;
         }
-        .payment-popup .close-payment:hover { border-color: var(--accent); }
-
-        /* ============================================================
-           ADMIN OVERLAY
-           ============================================================ */
-        .admin-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.88);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-        .admin-overlay.show { display: flex; }
-
-        .admin-panel {
-            background: var(--bg-secondary);
-            border: 2px solid var(--accent);
-            border-radius: 24px;
-            padding: 28px;
-            max-width: 750px;
-            width: 92%;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        .admin-panel h2 { color: var(--accent); margin-bottom: 14px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
-        .admin-panel h3 { color: var(--accent); margin: 16px 0 8px; }
-        .admin-panel label { display: block; color: var(--text-secondary); margin: 10px 0 4px; font-size: 13px; }
-        .admin-panel input, .admin-panel textarea, .admin-panel select {
-            width: 100%;
-            padding: 8px 12px;
-            background: var(--bg-input);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            color: var(--text-primary);
-            font-size: 14px;
+        .admin-panel .admin-form input:focus,
+        .admin-panel .admin-form textarea:focus {
             outline: none;
+            border-color: var(--gold);
         }
-        .admin-panel input:focus, .admin-panel textarea:focus { border-color: var(--accent); }
-        .admin-panel textarea { min-height: 60px; resize: vertical; }
-
-        /* File input styling */
-        .admin-panel input[type="file"] {
+        .admin-panel .admin-form textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        .admin-panel .admin-form input[type="file"] {
             padding: 10px;
-            background: var(--bg-input);
-            border: 1px dashed var(--accent);
-            border-radius: 10px;
-            color: var(--text-primary);
+            border: 1px dashed rgba(201,168,76,0.2);
             cursor: pointer;
         }
-        .admin-panel input[type="file"]::file-selector-button {
-            background: var(--accent);
-            color: #0a0907;
-            padding: 6px 16px;
-            border: none;
-            border-radius: 20px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-right: 10px;
-        }
-        .admin-panel input[type="file"]::file-selector-button:hover {
-            background: #f5e7b0;
-        }
-        .admin-panel .preview-img {
-            max-width: 100%;
-            max-height: 200px;
+        .admin-panel .admin-form input[type="file"]::file-selector-button {
+            background: rgba(201,168,76,0.08);
+            border: 1px solid rgba(201,168,76,0.1);
             border-radius: 8px;
-            margin-top: 8px;
-            border: 1px solid var(--border-color);
+            padding: 6px 16px;
+            color: var(--pearl);
+            cursor: pointer;
+            transition: var(--transition);
         }
-
-        .admin-panel .btn-group {
+        .admin-panel .admin-form input[type="file"]::file-selector-button:hover {
+            background: rgba(201,168,76,0.15);
+        }
+        .admin-panel .admin-form .form-actions {
             display: flex;
             gap: 10px;
-            margin-top: 14px;
+            flex-wrap: wrap;
+            margin-top: 4px;
+        }
+
+        .admin-password-input {
+            margin-top: 16px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
             flex-wrap: wrap;
         }
-        .admin-panel .btn-group button {
-            padding: 8px 22px;
-            border-radius: 30px;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 13px;
-            transition: 0.3s;
+        .admin-password-input input {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(201,168,76,0.08);
+            border-radius: 100px;
+            padding: 10px 20px;
+            color: var(--pearl);
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            width: 200px;
+            transition: var(--transition);
         }
-        .btn-save { background: var(--accent); color: #0a0907; }
-        .btn-save:hover { background: #f5e7b0; transform: scale(1.02); }
-        .btn-close { background: var(--border-color); color: var(--text-primary); border: 1px solid var(--border-color) !important; }
-        .btn-close:hover { background: var(--text-muted); }
-        .btn-danger { background: #8b2a2a; color: #fff; }
-        .btn-danger:hover { background: #aa3333; }
+        .admin-password-input input:focus { outline: none; border-color: var(--gold); }
+        .admin-password-input input::placeholder { opacity: 0.3; }
+        .admin-password-input .admin-unlock {
+            padding: 10px 24px;
+            border-radius: 100px;
+            border: 1px solid var(--gold);
+            background: transparent;
+            color: var(--gold);
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+        .admin-password-input .admin-unlock:hover { background: var(--gold); color: var(--navy); }
+        .admin-password-input .admin-status { font-size: 13px; opacity: 0.3; }
 
-        .admin-panel .book-item, .admin-panel .payment-item {
-            background: var(--bg-card);
-            padding: 8px 12px;
-            border-radius: 10px;
-            margin: 4px 0;
+        /* ==========================================
+           SOCIAL MEDIA
+           ========================================== */
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+        .social-card {
+            background: rgba(26,26,46,0.25);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(201,168,76,0.04);
+            border-radius: var(--radius-sm);
+            padding: 24px 16px;
+            text-align: center;
+            transition: var(--transition);
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--pearl);
+        }
+        .social-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(201,168,76,0.12);
+            box-shadow: 0 16px 32px rgba(0,0,0,0.12);
+        }
+        .social-card .icon { font-size: 36px; margin-bottom: 8px; display: block; }
+        .social-card .name { font-size: 14px; font-weight: 500; }
+        .social-card .handle { font-size: 12px; opacity: 0.3; margin-top: 4px; }
+
+        /* ==========================================
+           SIGNAL
+           ========================================== */
+        .signal-box {
+            background: rgba(26,26,46,0.25);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(201,168,76,0.04);
+            border-radius: var(--radius);
+            padding: 40px 32px;
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto;
+            transition: var(--transition);
+        }
+        .signal-box:hover { border-color: rgba(201,168,76,0.08); }
+        .signal-box .big-icon { font-size: 56px; color: var(--gold); margin-bottom: 16px; display: block; }
+        .signal-box h2 { font-family: 'Playfair Display', serif; font-size: 32px; margin-bottom: 8px; }
+        .signal-box .accuracy { font-size: 18px; color: var(--gold); font-weight: 600; margin-bottom: 12px; }
+        .signal-box .message { font-size: 16px; opacity: 0.6; line-height: 1.8; max-width: 500px; margin: 0 auto 20px; }
+        .signal-box .contact { font-size: 14px; opacity: 0.4; margin-top: 12px; }
+
+        /* ==========================================
+           COMMUNITY
+           ========================================== */
+        .community-box {
+            background: rgba(26,26,46,0.25);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(201,168,76,0.04);
+            border-radius: var(--radius);
+            padding: 24px;
+            max-width: 720px;
+            margin: 0 auto;
+            transition: var(--transition);
+        }
+        .community-post-input textarea {
+            width: 100%;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(201,168,76,0.06);
+            border-radius: var(--radius-sm);
+            padding: 14px 18px;
+            color: var(--pearl);
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            resize: vertical;
+            min-height: 76px;
+            transition: var(--transition);
+            margin-bottom: 12px;
+        }
+        .community-post-input textarea:focus { outline: none; border-color: var(--gold); }
+        .community-post-input textarea::placeholder { opacity: 0.25; }
+        .community-actions {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-left: 3px solid var(--accent);
+            flex-wrap: wrap;
+            gap: 12px;
         }
-        .admin-panel .book-item small { color: var(--text-muted); font-size: 11px; }
-        .admin-panel .book-item button, .admin-panel .payment-item button {
-            background: none;
+        .community-actions .user-name {
+            font-size: 13px;
+            opacity: 0.4;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .community-actions .user-name .name-input {
+            background: transparent;
             border: none;
-            color: var(--accent);
-            cursor: pointer;
-            font-size: 14px;
-            padding: 0 4px;
+            border-bottom: 1px dashed rgba(201,168,76,0.15);
+            color: var(--pearl);
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            padding: 2px 8px;
+            width: 120px;
         }
-        .admin-panel .book-item button:hover { color: var(--loss); }
-        .admin-panel .payment-item .approve-btn { color: var(--profit); font-weight: 600; cursor: pointer; }
-        .admin-panel .payment-item .approve-btn:hover { text-decoration: underline; }
-
-        .login-box { text-align: center; padding: 20px; }
-        .login-box input {
-            width: 100%;
-            padding: 12px;
-            margin: 8px 0;
-            background: var(--bg-input);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            color: var(--text-primary);
-            text-align: center;
+        .community-actions .user-name .name-input:focus { outline: none; border-bottom-color: var(--gold); }
+        .community-posts { margin-top: 16px; }
+        .community-post-item {
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(201,168,76,0.04);
         }
-        .login-box .btn-login {
-            background: var(--accent);
-            color: #0a0907;
-            padding: 12px 40px;
-            border: none;
-            border-radius: 30px;
-            font-weight: 700;
-            cursor: pointer;
-            margin-top: 10px;
-            font-size: 16px;
+        .community-post-item:last-child { border-bottom: none; }
+        .community-post-item .post-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 4px;
         }
-
-        /* ============================================================
-           RESPONSIVE
-           ============================================================ */
-        @media (max-width: 768px) {
-            .main-grid { grid-template-columns: 1fr; }
-            .sidebar { position: relative; max-height: 250px; }
-            .header { flex-direction: column; align-items: stretch; }
-            .tabs { justify-content: center; }
-            .admin-panel { padding: 16px; }
-            .plans-grid { grid-template-columns: 1fr; }
-            .payment-popup { padding: 20px; }
-        }
-
-        /* ============================================================
-           FOOTER
-           ============================================================ */
-        .footer {
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 12px;
-            padding: 16px 0 6px;
-            border-top: 1px solid var(--border-color);
-            margin-top: 16px;
-        }
-
-        .whatsapp-float {
-            position: fixed;
-            bottom: 70px;
-            right: 16px;
-            background: var(--whatsapp);
-            color: #fff;
-            width: 52px;
-            height: 52px;
+        .community-post-item .post-avatar {
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
+            background: var(--gold);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 26px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px var(--whatsapp)40;
-            transition: 0.3s;
-            z-index: 99;
-            text-decoration: none;
+            color: var(--navy);
+            font-weight: 600;
+            font-size: 12px;
+            flex-shrink: 0;
         }
-        .whatsapp-float:hover {
-            transform: scale(1.1);
-            box-shadow: 0 4px 25px var(--whatsapp)60;
+        .community-post-item .post-author { font-weight: 500; font-size: 14px; }
+        .community-post-item .post-time { font-size: 11px; opacity: 0.3; margin-left: auto; }
+        .community-post-item .post-text { opacity: 0.7; font-size: 14px; line-height: 1.7; padding-left: 44px; }
+        .community-post-item .post-delete { padding-left: 44px; margin-top: 4px; }
+        .community-post-item .post-delete button {
+            background: transparent;
+            border: none;
+            color: #ff6b6b;
+            opacity: 0.2;
+            cursor: pointer;
+            font-size: 12px;
+            transition: var(--transition);
+        }
+        .community-post-item .post-delete button:hover { opacity: 1; }
+
+        /* ==========================================
+           ADMIN SOCIAL
+           ========================================== */
+        .admin-social-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 10px;
+            margin-top: 12px;
+        }
+        .admin-social-card {
+            background: rgba(26,26,46,0.2);
+            border: 1px solid rgba(201,168,76,0.06);
+            border-radius: var(--radius-sm);
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition);
+        }
+        .admin-social-card:hover { border-color: rgba(201,168,76,0.12); }
+        .admin-social-card .social-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            overflow: hidden;
+        }
+        .admin-social-card .social-info .s-icon { font-size: 18px; flex-shrink: 0; }
+        .admin-social-card .social-info .s-name { font-weight: 500; font-size: 14px; }
+        .admin-social-card .social-info .s-link { font-size: 12px; opacity: 0.3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .admin-social-card .s-actions { display: flex; gap: 6px; flex-shrink: 0; }
+        .admin-social-card .s-actions button {
+            background: transparent;
+            border: none;
+            color: var(--pearl);
+            opacity: 0.3;
+            cursor: pointer;
+            transition: var(--transition);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+        .admin-social-card .s-actions button:hover { opacity: 1; background: rgba(201,168,76,0.06); }
+        .admin-social-card .s-actions .del-social:hover { color: #ff6b6b; background: rgba(255,107,107,0.08); }
+
+        /* ==========================================
+           FOOTER
+           ========================================== */
+        .footer {
+            border-top: 1px solid rgba(201,168,76,0.04);
+            padding: 32px 0;
+            margin-top: 32px;
+        }
+        .footer-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .footer .logo-small {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            color: var(--gold);
+        }
+        .footer .logo-small span { color: var(--pearl); font-weight: 300; }
+        .footer-links { display: flex; gap: 20px; }
+        .footer-link {
+            color: var(--pearl);
+            opacity: 0.3;
+            text-decoration: none;
+            font-size: 13px;
+            transition: var(--transition);
+        }
+        .footer-link:hover { opacity: 1; color: var(--gold); }
+        .footer-copy { font-size: 12px; opacity: 0.15; }
+
+        /* ==========================================
+           CATEGORIES
+           ========================================== */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 24px;
+        }
+        .category-card {
+            background: rgba(26,26,46,0.25);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(201,168,76,0.04);
+            border-radius: var(--radius);
+            padding: 28px 20px;
+            text-align: center;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        .category-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(201,168,76,0.12);
+            box-shadow: 0 16px 32px rgba(0,0,0,0.12);
+        }
+        .category-card .icon { font-size: 40px; color: var(--gold); margin-bottom: 12px; display: block; }
+        .category-card h3 { font-family: 'Playfair Display', serif; font-size: 20px; margin-bottom: 4px; }
+        .category-card p { opacity: 0.4; font-size: 13px; }
+
+        /* ==========================================
+           TOAST
+           ========================================== */
+        .toast-notification {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(26,26,46,0.92);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(201,168,76,0.15);
+            color: var(--pearl);
+            padding: 12px 24px;
+            border-radius: 100px;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+            z-index: 9999;
+            animation: fadeUp 0.4s ease;
+            max-width: 90%;
+            text-align: center;
+        }
+        body.light .toast-notification {
+            background: rgba(248,246,240,0.95);
+            color: #1A1A2E;
+            border: 1px solid rgba(201,168,76,0.15);
         }
 
-        .back-top {
-            position: fixed;
-            bottom: 16px;
-            right: 16px;
-            background: var(--bg-card);
-            border: 1px solid var(--accent);
-            color: var(--accent);
-            border-radius: 40px;
-            padding: 6px 14px;
-            font-size: 13px;
-            cursor: pointer;
-            opacity: 0.7;
-            z-index: 100;
+        /* ==========================================
+           RESPONSIVE
+           ========================================== */
+        @media (max-width: 768px) {
+            .hero-title { font-size: 32px; }
+            .hero { padding: 100px 0 30px; min-height: auto; }
+            .categories-grid { grid-template-columns: 1fr 1fr; }
+            .books-grid { grid-template-columns: 1fr; }
+            .social-grid { grid-template-columns: 1fr 1fr; }
+            .container { padding: 0 16px; }
+            .admin-panel { padding: 16px; }
+            .signal-box { padding: 24px 16px; }
+            .signal-box .big-icon { font-size: 40px; }
+            .signal-box h2 { font-size: 24px; }
         }
-        .back-top:hover { opacity: 1; background: var(--accent-bg); }
+        @media (max-width: 480px) {
+            .hero-title { font-size: 26px; }
+            .categories-grid { grid-template-columns: 1fr; }
+            .social-grid { grid-template-columns: 1fr; }
+            .admin-social-grid { grid-template-columns: 1fr; }
+            .hero-stats { gap: 20px; flex-wrap: wrap; }
+            .journey-card .post-image { max-height: 300px; }
+        }
     </style>
 </head>
 <body>
 
-    <!-- ===== APP ===== -->
-    <div class="app" id="app">
-
-        <!-- HEADER -->
-        <header class="header">
-            <div class="logo-area" id="logoArea" title="Click 3 times for Admin">
-                <span class="brand">🏛️ EFI Trader </span>
-                <span class="brand-sub">by Afifa Shakeel</span>
+    <!-- ===== NAVIGATION ===== -->
+    <nav class="nav-blur">
+        <div class="container nav-inner">
+            <div class="logo" id="logoTrigger">EFI <span>Trader</span></div>
+            <div class="nav-actions">
+                <button class="nav-btn" id="themeToggle"><i class="fas fa-moon"></i></button>
+                <button class="lang-btn" id="langToggle">EN</button>
             </div>
-            <div class="header-actions">
-                <button class="theme-toggle" id="themeToggle" title="Toggle Theme">🌓</button>
-                <div class="search-box">
-                    <input id="searchInput" placeholder="Search...">
-                    <button id="searchBtn">🔍</button>
-                </div>
-            </div>
-        </header>
-
-        <!-- TABS -->
-        <div class="tabs">
-            <button class="nav-tab active" data-tab="books">📚 Books</button>
-            <button class="nav-tab" data-tab="journey">📖 My Trading Journey</button>
-            <button class="nav-tab" data-tab="signals">📊 Signal Group</button>
-            <button class="nav-tab" data-tab="subscribe">💎 Subscribe</button>
-            <button class="nav-tab" data-tab="social">🌐 Social</button>
         </div>
+    </nav>
 
-        <!-- ===== TAB: BOOKS ===== -->
-        <div class="tab-content active" id="tab-books">
-            <div class="main-grid">
-                <aside class="sidebar" id="sidebar">
-                    <div class="sidebar-title">📚 My Books</div>
-                    <ul class="book-list" id="bookList"></ul>
-                    <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border-color);font-size:12px;color:var(--text-muted);">
-                        <span id="totalBooks">0</span> books • <span id="totalTopics">0</span> topics
+    <!-- ==========================================
+    HOME PAGE
+    ========================================== -->
+    <div id="homePage" class="page-container active">
+        <section class="hero">
+            <div class="container">
+                <div class="hero-grid">
+                    <span class="hero-badge"><i class="fas fa-star"></i> #1 Forex Education</span>
+                    <h1 class="hero-title">Trade with <span class="highlight">Knowledge</span>, Not Emotions</h1>
+                    <p class="hero-desc">Professional Forex education, practical strategies, risk management, and a supportive trading community—all in one place.</p>
+                    <div class="hero-stats">
+                        <div class="stat-item"><div class="number">$4.2B</div><div class="label">Daily Volume</div></div>
+                        <div class="stat-item"><div class="number">21</div><div class="label">Chapters</div></div>
+                        <div class="stat-item"><div class="number">10K+</div><div class="label">Traders</div></div>
                     </div>
-                </aside>
-                <main class="content-area" id="pageRenderer"></main>
-            </div>
-        </div>
-
-        <!-- ===== TAB: TRADING JOURNEY ===== -->
-        <div class="tab-content" id="tab-journey">
-            <h2 style="color:var(--accent);margin-bottom:12px;">📖 My Trading Journey</h2>
-            <div id="journeyFeed"></div>
-        </div>
-
-        <!-- ===== TAB: SIGNAL GROUP ===== -->
-        <div class="tab-content" id="tab-signals">
-            <h2 style="color:var(--accent);margin-bottom:12px;">📊 Signal Group</h2>
-            <div id="signalArea"></div>
-        </div>
-
-        <!-- ===== TAB: SUBSCRIBE ===== -->
-        <div class="tab-content" id="tab-subscribe">
-            <h2 style="color:var(--accent);margin-bottom:12px;">💎 Subscribe & Mentorship</h2>
-            <p style="color:var(--text-muted);margin-bottom:16px;">Choose your plan and start your trading journey with EFI Trader </p>
-
-            <div class="plans-grid">
-                <div class="plan-card">
-                    <div class="plan-icon">📢</div>
-                    <div class="plan-title">Free Signals</div>
-                    <div class="plan-price">FREE</div>
-                    <ul class="plan-features">
-                        <li>Daily 1-2 signals</li>
-                        <li>Basic analysis</li>
-                        <li>Community access</li>
-                    </ul>
-                    <a href="https://wa.me/923363811338" target="_blank" class="plan-btn whatsapp-btn">📱 Contact on WhatsApp</a>
-                </div>
-
-                <div class="plan-card featured">
-                    <div class="plan-icon">💎</div>
-                    <div class="plan-title">Premium Signals</div>
-                    <div class="plan-price">₨ 5,000 <small>/month</small></div>
-                    <ul class="plan-features">
-                        <li>5-10 signals daily</li>
-                        <li>Advanced analysis</li>
-                        <li>Entry, SL, TP levels</li>
-                        <li>Risk management tips</li>
-                        <li>Priority support</li>
-                    </ul>
-                    <button class="plan-btn" onclick="openPayment('Premium Signals', 5000)">🔒 Subscribe Now</button>
-                </div>
-
-                <div class="plan-card">
-                    <div class="plan-icon">👩‍🏫</div>
-                    <div class="plan-title">1-on-1 Mentorship</div>
-                    <div class="plan-price">₨ 10,000 <small>/month</small></div>
-                    <ul class="plan-features">
-                        <li>Personal coaching</li>
-                        <li>Live trading sessions</li>
-                        <li>Daily market analysis</li>
-                        <li>Strategy development</li>
-                        <li>Unlimited support</li>
-                    </ul>
-                    <a href="https://wa.me/923363811338" target="_blank" class="plan-btn whatsapp-btn">📱 Contact for Mentorship</a>
                 </div>
             </div>
+        </section>
 
-            <div style="text-align:center;padding:20px;background:var(--bg-card);border-radius:12px;border:1px solid var(--border-color);margin-top:12px;">
-                <p style="color:var(--text-muted);">📱 <strong style="color:var(--accent);">WhatsApp:</strong> 0336-3811338</p>
+        <section class="section-alt" style="padding:40px 0;">
+            <div class="container">
+                <h2 class="section-title" style="font-family:'Playfair Display',serif; font-size:32px; text-align:center;">Explore <span class="text-gold">Categories</span></h2>
+                <div class="categories-grid">
+                    <div class="category-card" onclick="showPage('booksPage')">
+                        <span class="icon"><i class="fas fa-book"></i></span>
+                        <h3>📚 Books</h3>
+                        <p>View & download PDFs</p>
+                    </div>
+                    <div class="category-card" onclick="showPage('journeyPage')">
+                        <span class="icon"><i class="fas fa-road"></i></span>
+                        <h3>📊 Trading Journey</h3>
+                        <p>Admin posts & insights</p>
+                    </div>
+                    <div class="category-card" onclick="showPage('socialPage')">
+                        <span class="icon"><i class="fas fa-share-alt"></i></span>
+                        <h3>📱 Social Media</h3>
+                        <p>YouTube · Instagram · TikTok</p>
+                    </div>
+                    <div class="category-card" onclick="showPage('signalPage')">
+                        <span class="icon"><i class="fas fa-bullhorn"></i></span>
+                        <h3>📡 Free Signals</h3>
+                        <p>95% Accuracy · WhatsApp</p>
+                    </div>
+                    <div class="category-card" onclick="showPage('communityPage')">
+                        <span class="icon"><i class="fas fa-users"></i></span>
+                        <h3>💬 Community</h3>
+                        <p>Share ideas · Connect</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ==========================================
+    BOOKS PAGE
+    ========================================== -->
+    <div id="booksPage" class="page-container">
+        <div class="container">
+            <div class="page-header">
+                <button class="btn-back" onclick="showPage('homePage')"><i class="fas fa-arrow-left"></i> Back</button>
+                <h2><i class="fas fa-book text-gold"></i> Books</h2>
+            </div>
+            <p style="opacity:0.4; font-size:14px; margin-bottom:16px;">Download PDFs and learn from expert resources</p>
+
+            <div class="books-grid" id="booksGrid"></div>
+
+            <!-- ADMIN PANEL -->
+            <div class="admin-panel" id="adminPanel">
+                <h3><i class="fas fa-lock text-gold"></i> Admin Panel</h3>
+                <p class="admin-sub">Manage Books · Trading Journey · Social Media</p>
+                
+                <div style="margin-bottom:16px;">
+                    <h4 style="font-size:16px; margin-bottom:8px;">📚 Books Management</h4>
+                    <div class="admin-grid">
+                        <button class="admin-btn" id="adminShowBookForm"><i class="fas fa-plus-circle"></i> Add Book</button>
+                        <button class="admin-btn danger" id="adminDeleteAllBooks"><i class="fas fa-trash"></i> Delete All</button>
+                    </div>
+                    <div class="admin-form" id="adminBookForm">
+                        <label>Book Name *</label>
+                        <input type="text" id="bookNameInput" placeholder="Enter book name" />
+                        <label>Book Description *</label>
+                        <textarea id="bookDescInput" placeholder="Enter book description"></textarea>
+                        <label>Upload PDF</label>
+                        <input type="file" id="bookPdfInput" accept=".pdf" />
+                        <div class="form-actions">
+                            <button class="btn-primary" id="submitBookBtn" style="padding:10px 24px; font-size:14px;"><i class="fas fa-upload"></i> Upload Book</button>
+                            <button class="btn-secondary" id="cancelBookBtn" style="padding:10px 24px; font-size:14px;">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-bottom:16px;">
+                    <h4 style="font-size:16px; margin-bottom:8px;">📊 Trading Journey</h4>
+                    <div class="admin-grid">
+                        <button class="admin-btn" id="adminShowJourneyForm"><i class="fas fa-plus-circle"></i> Add Post</button>
+                        <button class="admin-btn danger" id="adminDeleteAllJourney"><i class="fas fa-trash"></i> Delete All</button>
+                    </div>
+                    <div class="admin-form" id="adminJourneyForm">
+                        <label>Description *</label>
+                        <textarea id="journeyDescInput" placeholder="Write your trading journey update..."></textarea>
+                        <label>Upload Image</label>
+                        <input type="file" id="journeyImageInput" accept="image/*" />
+                        <div class="form-actions">
+                            <button class="btn-primary" id="submitJourneyBtn" style="padding:10px 24px; font-size:14px;"><i class="fas fa-upload"></i> Publish Post</button>
+                            <button class="btn-secondary" id="cancelJourneyBtn" style="padding:10px 24px; font-size:14px;">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-bottom:16px;">
+                    <h4 style="font-size:16px; margin-bottom:8px;">📱 Social Media Links</h4>
+                    <div class="admin-grid">
+                        <button class="admin-btn" id="adminAddSocial"><i class="fas fa-plus-circle"></i> Add Social</button>
+                    </div>
+                    <div class="admin-social-grid" id="adminSocialList"></div>
+                </div>
+
+                <div class="admin-password-input">
+                    <input type="password" id="adminPasswordInput" placeholder="Enter password" />
+                    <button class="admin-unlock" id="adminUnlockBtn"><i class="fas fa-unlock"></i> Unlock</button>
+                    <span class="admin-status" id="adminStatus">🔒 Locked</span>
+                </div>
             </div>
         </div>
+    </div>
 
-        <!-- ===== TAB: SOCIAL ===== -->
-        <div class="tab-content" id="tab-social">
-            <h2 style="color:var(--accent);margin-bottom:12px;">🌐 Connect With Us</h2>
-            <p style="color:var(--text-muted);margin-bottom:16px;">Follow EFI Trader on social media!</p>
+    <!-- ==========================================
+    TRADING JOURNEY PAGE
+    ========================================== -->
+    <div id="journeyPage" class="page-container">
+        <div class="container">
+            <div class="page-header">
+                <button class="btn-back" onclick="showPage('homePage')"><i class="fas fa-arrow-left"></i> Back</button>
+                <h2><i class="fas fa-road text-gold"></i> Trading Journey</h2>
+            </div>
+            <p style="opacity:0.4; font-size:14px; margin-bottom:16px;">Follow the trading journey of our community</p>
 
+            <div class="journey-feed" id="journeyFeed"></div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+    SOCIAL MEDIA PAGE
+    ========================================== -->
+    <div id="socialPage" class="page-container">
+        <div class="container">
+            <div class="page-header">
+                <button class="btn-back" onclick="showPage('homePage')"><i class="fas fa-arrow-left"></i> Back</button>
+                <h2><i class="fas fa-share-alt text-gold"></i> Social Media</h2>
+            </div>
+            <p style="opacity:0.4; font-size:14px; margin-bottom:16px;">Follow us on all platforms</p>
             <div class="social-grid" id="socialGrid"></div>
-            <div class="social-embed" id="socialEmbed"></div>
         </div>
-
-        <!-- FOOTER -->
-        <footer class="footer">EFI Trader| Created by Afifa Shakeel</footer>
-        <div class="back-top" id="backTop">↑ Top</div>
-
-        <!-- WHATSAPP FLOAT -->
-        <a href="https://wa.me/923363811338" target="_blank" class="whatsapp-float">💬</a>
     </div>
 
-    <!-- ===== PAYMENT POPUP ===== -->
-    <div class="payment-overlay" id="paymentOverlay">
-        <div class="payment-popup">
-            <h2>💰 Buy This</h2>
-            <div class="book-name" id="paymentBookName">Item Name</div>
-            <div class="price" id="paymentPrice">₨ 500</div>
+    <!-- ==========================================
+    SIGNALS PAGE
+    ========================================== -->
+    <div id="signalPage" class="page-container">
+        <div class="container">
+            <div class="page-header">
+                <button class="btn-back" onclick="showPage('homePage')"><i class="fas fa-arrow-left"></i> Back</button>
+                <h2><i class="fas fa-bullhorn text-gold"></i> Free Signals</h2>
+            </div>
+            <div class="signal-box">
+                <span class="big-icon"><i class="fas fa-bullhorn"></i></span>
+                <h2>📡 Free Trading Signals</h2>
+                <div class="accuracy">⭐ 95% Accuracy Rate ⭐</div>
+                <div class="message">
+                    Get daily trading signals, market analysis, and expert insights directly on WhatsApp.<br />
+                    <strong style="color:var(--gold);">100% Free · No hidden charges</strong>
+                </div>
+                <div style="display:flex; gap:12px; flex-wrap:wrap; justify-content:center;">
+                    <a href="#" class="btn-whatsapp" id="signalWhatsappBtn"><i class="fab fa-whatsapp"></i> DM on WhatsApp</a>
+                    <button class="btn-secondary" id="signalDmBtn" style="padding:12px 28px;">Send Message</button>
+                </div>
+                <div class="contact"><i class="fas fa-phone"></i> 0336-3811338</div>
+            </div>
+        </div>
+    </div>
 
-            <div class="payment-methods">
-                <div class="payment-method jazzcash">
-                    <div class="icon">🏦</div>
-                    <div class="details">
-                        <div class="name">JazzCash</div>
-                        <div class="number">03194168658</div>
-                        <div class="holder">Account: Afifa Shakeel</div>
+    <!-- ==========================================
+    COMMUNITY PAGE
+    ========================================== -->
+    <div id="communityPage" class="page-container">
+        <div class="container">
+            <div class="page-header">
+                <button class="btn-back" onclick="showPage('homePage')"><i class="fas fa-arrow-left"></i> Back</button>
+                <h2><i class="fas fa-users text-gold"></i> Public Community</h2>
+            </div>
+            <p style="opacity:0.4; font-size:14px; margin-bottom:16px;">Share your trading ideas and connect with fellow traders</p>
+
+            <div class="community-box">
+                <div class="community-post-input">
+                    <textarea id="communityInput" placeholder="Share your trading idea or question..."></textarea>
+                </div>
+                <div class="community-actions">
+                    <button class="btn-primary" id="communityPostBtn" style="padding:10px 24px; font-size:14px;">
+                        <i class="fas fa-pen"></i> Post
+                    </button>
+                    <div class="user-name">
+                        <i class="far fa-user" style="opacity:0.3;"></i>
+                        <input type="text" class="name-input" id="communityUserName" placeholder="Your name" value="Trader" />
                     </div>
                 </div>
-                <div class="payment-method upaisa">
-                    <div class="icon">📱</div>
-                    <div class="details">
-                        <div class="name">UPAISA</div>
-                        <div class="number">03194168658</div>
-                        <div class="holder">Account: Afifa Shakeel</div>
-                    </div>
+                <div class="community-posts" id="communityPosts"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-inner">
+                <div class="logo-small">EFI <span>Trader</span></div>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Privacy Policy</a>
+                    <a href="#" class="footer-link">Terms of Service</a>
+                    <a href="#" class="footer-link">Contact Us</a>
                 </div>
+                <div class="footer-copy">© 2026 EFI Trader. All rights reserved.</div>
             </div>
-
-            <div class="payment-steps">
-                <h4>📌 How to Buy:</h4>
-                <ol>
-                    <li>Pay the amount to JazzCash or UPAISA above</li>
-                    <li>Take a screenshot of the payment</li>
-                    <li>Click the button below to send the screenshot on WhatsApp</li>
-                    <li>We'll verify and give you access immediately!</li>
-                </ol>
-            </div>
-
-            <a href="https://wa.me/923363811338" target="_blank" class="whatsapp-btn">📤 Send Payment Screenshot on WhatsApp</a>
-            <button class="close-payment" onclick="closePayment()">❌ Close</button>
         </div>
-    </div>
+    </footer>
 
-    <!-- ===== ADMIN OVERLAY ===== -->
-    <div class="admin-overlay" id="adminOverlay">
-        <div class="admin-panel" id="adminPanel">
-            <div id="adminContent"></div>
-        </div>
-    </div>
-
+    <!-- ==========================================
+    JAVASCRIPT
+    ========================================== -->
     <script>
-        // ============================================================
-        // YOUR ORIGINAL BOOK DATA (16 Topics)
-        // ============================================================
-        const DEFAULT_BOOK = {
-            id: 'book_1',
-            title: 'Forex & Gold Trading Complete Beginner Notes (A to Z)',
-            author: 'Afifa Shakeel',
-            price: 0,
-            description: 'Complete beginner course covering Forex, Gold, and trading basics. Perfect for absolute beginners!',
-            chapters: [
-                { id: 0, title: "Cover Page", type: "cover" },
-                { id: 1, title: "About This Course", type: "about" },
-                { id: 2, title: "Table of Contents", type: "toc" },
-                { id: 3, title: "What is Forex?", def: "Forex (Foreign Exchange) is the global market where currencies are bought and sold.",
-                    why: "Forex enables international trade, travel, and investment.",
-                    easy: "Imagine going to USA and exchanging Rupees for Dollars.",
-                    real: "A Pakistani company exports goods to Europe, receives Euros, and converts them to Rupees.",
-                    forexEg: "A trader buys EUR/USD at 1.1000 and sells at 1.1050, making 50 pips profit.",
-                    rules: "Always trade with a regulated broker. Never risk more than you can afford to lose.",
-                    mistakes: "Trading without a plan. Overtrading. Not using stop loss.",
-                    tips: "Start with a demo account. Learn the basics before using real money.",
-                    revision: "Forex = global currency exchange market. Biggest market in the world." },
-                { id: 4, title: "Forex Introduction", def: "Forex is the decentralized global market where all world currencies trade.",
-                    why: "It's the backbone of international finance and trade.",
-                    easy: "Think of Forex as a giant currency exchange shop that never closes.",
-                    real: "When a Pakistani company exports goods to Europe, they receive Euros and convert them to Rupees.",
-                    forexEg: "A trader watches the news and buys USD/JPY because the US economy is strong.",
-                    rules: "Forex trades in currency pairs. Always buy low and sell high.",
-                    mistakes: "Thinking you can get rich overnight. Forex is not gambling.",
-                    tips: "Learn about economic news. It moves the Forex market.",
-                    revision: "Forex is a 24/5 global currency market." },
-                { id: 5, title: "Forex Market", def: "The Forex market is where currencies are traded. It has no central location - it's OTC.",
-                    why: "It provides liquidity and price discovery for currencies worldwide.",
-                    easy: "Imagine a huge online marketplace where everyone is buying and selling money.",
-                    real: "Banks, hedge funds, central banks, and retail traders all participate.",
-                    forexEg: "A central bank can intervene in Forex to stabilize the dollar.",
-                    rules: "The market moves based on supply and demand. News drives prices.",
-                    mistakes: "Trading during low liquidity hours (like weekends).",
-                    tips: "Trade during high liquidity sessions: London, New York, Tokyo.",
-                    revision: "Forex market = OTC, 24/5, decentralized." },
-                { id: 6, title: "What is a Broker?", def: "A broker is a company that gives you access to the Forex market.",
-                    why: "Without a broker, you can't trade Forex.",
-                    easy: "Think of a broker as a middleman.",
-                    real: "Brokers like Exness, IC Markets, OANDA give you trading access.",
-                    forexEg: "You place a buy order for GBP/USD through your broker.",
-                    rules: "Choose a regulated broker (FCA, CySEC, ASIC).",
-                    mistakes: "Using an unregulated broker. You might lose your money.",
-                    tips: "Test the broker's platform with a demo account first.",
-                    revision: "Broker = your gateway to the Forex market." },
-                { id: 7, title: "Currency Pairs", def: "Currencies are traded in pairs.",
-                    why: "Because you're comparing the value of one currency against another.",
-                    easy: "EUR/USD means Euro vs US Dollar.",
-                    real: "If EUR/USD = 1.1000, it means 1 Euro = 1.10 US Dollars.",
-                    forexEg: "You buy EUR/USD if you think the Euro will go up.",
-                    rules: "Base currency is always 1 unit. Quote is how much it costs.",
-                    mistakes: "Confusing base and quote currencies.",
-                    tips: "Focus on major pairs first like EUR/USD.",
-                    revision: "Currency pairs show the value of one currency against another." },
-                { id: 8, title: "Major, Minor & Exotic Pairs", def: "Major pairs include USD with other major currencies.",
-                    why: "Knowing the difference helps you choose pairs with lower spreads.",
-                    easy: "Majors = most traded. Minors = cross currencies. Exotics = unusual.",
-                    real: "EUR/USD is a major. EUR/GBP is a minor. USD/TRY is an exotic.",
-                    forexEg: "Trading majors is cheaper due to lower spreads.",
-                    rules: "Stick to majors as a beginner. They have more liquidity.",
-                    mistakes: "Trading exotics without understanding their risks.",
-                    tips: "Start with EUR/USD or USD/JPY.",
-                    revision: "Majors = USD pairs. Minors = no USD. Exotics = emerging." },
-                { id: 9, title: "Gold (XAU/USD)", def: "XAU/USD is the trading symbol for Gold against the US Dollar.",
-                    why: "Gold is a safe-haven asset.",
-                    easy: "Gold is like a store of value.",
-                    real: "During the 2008 financial crisis, Gold prices rose.",
-                    forexEg: "If XAU/USD is 2000, 1 ounce Gold costs 2000 US Dollars.",
-                    rules: "Gold is influenced by interest rates, inflation, and global events.",
-                    mistakes: "Ignoring news events that affect Gold prices.",
-                    tips: "Watch the US Dollar Index (DXY) for clues on Gold direction.",
-                    revision: "XAU/USD = Gold vs US Dollar. Safe-haven asset." },
-                { id: 10, title: "Trading Terminology", def: "Trading terminology includes all the special words used in Forex.",
-                    why: "You need to understand these terms to trade.",
-                    easy: "It's like learning the language of trading.",
-                    real: "'I made 50 pips today' = earned 50 pips.",
-                    forexEg: "'I placed a buy order with 0.1 lot, SL 20 pips, TP 40 pips.'",
-                    rules: "Learn one term at a time. Practice using them.",
-                    mistakes: "Using terms incorrectly can lead to costly mistakes.",
-                    tips: "Keep a glossary handy. Write down new terms you learn.",
-                    revision: "Trading terminology = the language of traders." },
-                { id: 11, title: "Pip & Point", def: "A pip is the smallest price move in Forex. 1 pip = 0.0001.",
-                    why: "Pips help measure profit and loss.",
-                    easy: "Think of pips like inches on a ruler.",
-                    real: "EUR/USD 1.1000 to 1.1010 = 10 pips.",
-                    forexEg: "Buy at 1.1000, sell at 1.1050 = 50 pips profit.",
-                    rules: "For JPY pairs, 1 pip = 0.01.",
-                    mistakes: "Mixing up pips and points.",
-                    tips: "5th decimal = point, 4th = pip.",
-                    revision: "Pip = 0.0001, Point = 0.00001." },
-                { id: 12, title: "Bid & Ask", def: "Bid = Sell price. Ask = Buy price.",
-                    why: "Bid and Ask create the spread.",
-                    easy: "Sell at Bid, buy at Ask.",
-                    real: "EUR/USD Bid 1.1000, Ask 1.1002.",
-                    forexEg: "Place sell at Bid, buy at Ask.",
-                    rules: "Bid is always lower than Ask.",
-                    mistakes: "Buying at Bid or selling at Ask.",
-                    tips: "Check both prices before trading.",
-                    revision: "Bid = Sell, Ask = Buy." },
-                { id: 13, title: "Spread", def: "Spread = difference between Bid and Ask.",
-                    why: "You pay the spread every time you enter a trade.",
-                    easy: "Bid 1.1000, Ask 1.1002, spread = 2 pips.",
-                    real: "ECN brokers have 0.1 pips spread.",
-                    forexEg: "Buy at 1.1002, sell at 1.1000 = 2 pips loss.",
-                    rules: "Lower spread = lower cost.",
-                    mistakes: "Not accounting for spread.",
-                    tips: "Trade during high liquidity for tight spreads.",
-                    revision: "Spread = Ask - Bid." },
-                { id: 14, title: "Lot Size", def: "Lot size = amount traded. Standard = 100,000, Mini = 10,000, Micro = 1,000.",
-                    why: "Lot size determines risk and profit per pip.",
-                    easy: "How much you're buying.",
-                    real: "1 standard lot = $10 per pip.",
-                    forexEg: "0.1 lot = $1 per pip. 0.01 lot = $0.10 per pip.",
-                    rules: "Start with micro lots (0.01).",
-                    mistakes: "Trading standard lots with small account.",
-                    tips: "Use a position size calculator.",
-                    revision: "Lot sizes: 1.0, 0.1, 0.01." },
-                { id: 15, title: "Leverage", def: "Leverage = borrowed money to control larger positions.",
-                    why: "Magnifies profits and losses.",
-                    easy: "$100 with 1:100 leverage = $10,000 control.",
-                    real: "1:500 leverage lets you control $50,000 with $100.",
-                    forexEg: "$1,000 with 1:100 = $100,000 control.",
-                    rules: "Higher leverage = higher risk.",
-                    mistakes: "Using maximum leverage on every trade.",
-                    tips: "Start with low leverage (1:10 or 1:20).",
-                    revision: "Leverage = borrowed capital." },
-                { id: 16, title: "Margin", def: "Margin = collateral to open a leveraged trade.",
-                    why: "Ensures you have money to cover losses.",
-                    easy: "$100,000 trade with 1% margin = $1,000 collateral.",
-                    real: "1:100 leverage = 1% margin.",
-                    forexEg: "1 lot EUR/USD = $1,000 margin (at 1%).",
-                    rules: "Margin is held as security.",
-                    mistakes: "Not knowing margin requirements.",
-                    tips: "Keep free margin positive.",
-                    revision: "Margin = collateral for trade." }
-            ]
-        };
+        (function() {
+            'use strict';
 
-        // ============================================================
-        // STATE
-        // ============================================================
-        let books = [];
-        let currentBookId = null;
-        let currentChapterIndex = 0;
-        let isAdminLoggedIn = false;
-        const ADMIN_PASSWORD = 'efi2024';
-
-        let journeyPosts = [];
-        let signalPosts = [];
-        let members = [];
-        let approvedMembers = [];
-        let payments = [];
-        let socialAccounts = [
-            { name: 'YouTube', icon: '▶️', url: '', embed: '', status: 'coming' },
-            { name: 'Instagram', icon: '📸', url: '', embed: '', status: 'coming' },
-            { name: 'Facebook', icon: '👍', url: '', embed: '', status: 'coming' },
-            { name: 'TikTok', icon: '🎵', url: '', embed: '', status: 'coming' },
-            { name: 'WhatsApp', icon: '💬', url: 'https://wa.me/923363811338', embed: '', status: 'available' },
-            { name: 'Telegram', icon: '✈️', url: '', embed: '', status: 'coming' }
-        ];
-
-        let logoClickCount = 0;
-
-        // Load Data
-        function loadData() {
-            const saved = localStorage.getItem('efi_data');
-            if (saved) {
-                try {
-                    const data = JSON.parse(saved);
-                    books = data.books || [DEFAULT_BOOK];
-                    journeyPosts = data.journeyPosts || [];
-                    signalPosts = data.signalPosts || [];
-                    members = data.members || [];
-                    approvedMembers = data.approvedMembers || [];
-                    payments = data.payments || [];
-                    socialAccounts = data.socialAccounts || socialAccounts;
-                    return;
-                } catch (e) {}
+            // ===== PAGE NAVIGATION =====
+            function showPage(pageId) {
+                document.querySelectorAll('.page-container').forEach(p => p.classList.remove('active'));
+                document.getElementById(pageId).classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
-            books = [DEFAULT_BOOK];
-            journeyPosts = [];
-            signalPosts = [];
-            members = [];
-            approvedMembers = [];
-            payments = [];
-            socialAccounts = socialAccounts;
-            saveData();
-        }
+            window.showPage = showPage;
 
-        function saveData() {
-            localStorage.setItem('efi_data', JSON.stringify({
-                books,
-                journeyPosts,
-                signalPosts,
-                members,
-                approvedMembers,
-                payments,
-                socialAccounts
-            }));
-        }
-
-        // ============================================================
-        // THEME
-        // ============================================================
-        function loadTheme() {
-            const theme = localStorage.getItem('efi_theme') || 'dark';
-            document.documentElement.setAttribute('data-theme', theme);
-            document.getElementById('themeToggle').textContent = theme === 'dark' ? '🌓' : '☀️';
-        }
-
-        function toggleTheme() {
-            const current = document.documentElement.getAttribute('data-theme') || 'dark';
-            const next = current === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', next);
-            localStorage.setItem('efi_theme', next);
-            document.getElementById('themeToggle').textContent = next === 'dark' ? '🌓' : '☀️';
-        }
-
-        // ============================================================
-        // LOGO CLICK - OPEN ADMIN (3 times)
-        // ============================================================
-        document.getElementById('logoArea').addEventListener('click', function() {
-            logoClickCount++;
-            if (logoClickCount === 3) {
-                logoClickCount = 0;
-                document.getElementById('adminOverlay').classList.add('show');
-                renderAdmin();
+            // ===== THEME =====
+            const themeToggle = document.getElementById('themeToggle');
+            const body = document.body;
+            if (localStorage.getItem('efi-theme') === 'light') {
+                body.classList.add('light');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
             }
-            clearTimeout(window.logoTimeout);
-            window.logoTimeout = setTimeout(() => { logoClickCount = 0; }, 3000);
-        });
-
-        // ============================================================
-        // PAYMENT POPUP
-        // ============================================================
-        function openPayment(itemName, price) {
-            document.getElementById('paymentBookName').textContent = itemName;
-            document.getElementById('paymentPrice').textContent = '₨ ' + price;
-            document.getElementById('paymentOverlay').classList.add('show');
-        }
-
-        function closePayment() {
-            document.getElementById('paymentOverlay').classList.remove('show');
-        }
-
-        // ============================================================
-        // BOOK RENDERER
-        // ============================================================
-        function getLevel(index) {
-            if (index >= 3 && index <= 10) return "📘 LEVEL 1: FOREX FOUNDATION";
-            if (index >= 11 && index <= 16) return "📊 LEVEL 2: PRICE & TRADING BASICS";
-            return "📚 LEVEL";
-        }
-
-        function renderBookContent(book, chapterIndex) {
-            const renderer = document.getElementById('pageRenderer');
-            const ch = book.chapters[chapterIndex];
-            if (!ch) return;
-
-            let html = '';
-            if (ch.type === 'cover') {
-                html = `
-                    <div style="text-align:center;padding:20px 10px;">
-                        <div style="display:inline-block;background:var(--accent-bg);border:2px solid var(--accent);color:var(--accent);padding:4px 26px;border-radius:40px;font-size:13px;letter-spacing:3px;font-weight:700;margin-bottom:10px;">📖 ${book.title}</div>
-                        <div style="font-size:clamp(28px,5vw,48px);font-weight:700;background:linear-gradient(135deg,#f7e8b0,#c9a84c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.2;">${book.title}</div>
-                        <div style="font-size:clamp(16px,2vw,22px);color:var(--text-muted);font-weight:300;">${book.description || 'Complete Beginner Course'}</div>
-                        <div style="background:var(--accent-bg);border:1px solid var(--accent-border);padding:8px 24px;border-radius:40px;display:inline-block;margin:10px 0;color:var(--text-secondary);font-size:17px;">🏛️ EFI Trader</div>
-                        <div style="color:var(--accent);font-size:18px;margin:4px 0;">✨ Created by <strong>${book.author}</strong></div>
-                        <div style="color:var(--text-muted);font-size:14px;margin:10px 0;">${book.chapters.length} Topics</div>
-                        <div style="font-size:18px;font-weight:700;margin:10px 0;color:${book.price === 0 ? 'var(--whatsapp)' : 'var(--accent)'};">${book.price === 0 ? '🎉 FREE' : '₨ ' + book.price}</div>
-                        ${book.price > 0 ? `<button class="buy-btn" onclick="openPayment('${book.title}', ${book.price})">💰 Buy Book (₨ ${book.price})</button>` : ''}
-                        <div style="border-top:1px solid var(--border-color);padding-top:14px;margin-top:18px;color:var(--text-muted);font-size:12px;">EFI Trader | Created by ${book.author}</div>
-                    </div>
-                `;
-            } else if (ch.type === 'about') {
-                html = `
-                    <h2 style="color:var(--accent);">📖 About This Course</h2>
-                    <div style="background:var(--bg-card);border-radius:16px;padding:20px;border-left:4px solid var(--accent);margin:14px 0;">
-                        <p><strong>👩‍🏫 Who this course is for:</strong><br>Complete beginners who want to learn Forex & Gold trading from zero.</p>
-                        <p style="margin-top:12px;"><strong>🎯 What you will learn:</strong><br>From Forex foundation to risk management and trading routine.</p>
-                        <p style="margin-top:10px;">📚 ${book.chapters.length} topics • Simple English</p>
-                        <p style="margin-top:6px;color:var(--accent);font-weight:600;">💰 Price: ${book.price === 0 ? 'FREE' : '₨ ' + book.price}</p>
-                    </div>
-                    <div style="background:var(--bg-card);border:1px solid var(--accent-border);border-radius:10px;padding:10px 14px;color:var(--accent);font-size:13px;text-align:center;">⚠️ This course is for education only. Trading involves financial risk.</div>
-                `;
-            } else if (ch.type === 'toc') {
-                let items = '';
-                book.chapters.forEach((c, idx) => {
-                    if (c.type === 'cover' || c.type === 'about' || c.type === 'toc') return;
-                    items +=
-                        `<div style="background:var(--bg-card);padding:8px 12px;border-radius:40px;border:1px solid var(--border-color);font-size:13px;cursor:pointer;text-align:center;color:var(--text-secondary);transition:0.2s;" data-index="${idx}"><span style="color:var(--accent);margin-right:4px;font-weight:600;">${idx}</span> ${c.title}</div>`;
-                });
-                html = `
-                    <h2 style="color:var(--accent);border-bottom:1px solid var(--border-color);padding-bottom:8px;">📑 Table of Contents</h2>
-                    <p style="color:var(--text-muted);margin-bottom:10px;">Click any topic to jump directly.</p>
-                    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;margin:16px 0;">${items}</div>
-                    ${book.price > 0 ? `<div style="text-align:center;margin-top:16px;"><button class="buy-btn" onclick="openPayment('${book.title}', ${book.price})">💰 Buy Book (₨ ${book.price})</button></div>` : ''}
-                `;
-            } else {
-                html = `
-                    <div>
-                        <div style="display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--border-color);padding-bottom:10px;flex-wrap:wrap;">
-                            <span style="color:var(--accent);font-size:13px;font-weight:300;">${getLevel(chapterIndex)} • Chapter ${chapterIndex}</span>
-                            <span style="color:var(--text-muted);font-size:13px;">${chapterIndex+1} / ${book.chapters.length-1}</span>
-                        </div>
-                        <h2 style="font-size:clamp(22px,3vw,32px);font-weight:600;color:var(--text-primary);margin:4px 0 8px;">${ch.title}</h2>
-                        <div style="padding:12px 0 6px;line-height:1.7;">
-                            <div style="background:var(--bg-card);border:1px solid var(--accent-border);border-radius:10px;padding:10px 14px;margin:8px 0;color:var(--accent);font-size:13px;text-align:center;">⚠️ Trading involves risk. Never trade with money you can't afford to lose.</div>
-                            <h4 style="color:var(--accent);margin:16px 0 4px;font-weight:500;font-size:17px;border-left:3px solid var(--accent);padding-left:10px;">📘 Simple Definition</h4>
-                            <p style="margin:10px 0;color:var(--text-secondary);">${ch.def}</p>
-                            <h4 style="color:var(--accent);margin:16px 0 4px;font-weight:500;font-size:17px;border-left:3px solid var(--accent);padding-left:10px;">⭐ Why It Is Important</h4>
-                            <p style="margin:10px 0;color:var(--text-secondary);">${ch.why}</p>
-                            <h4 style="color:var(--accent);margin:16px 0 4px;font-weight:500;font-size:17px;border-left:3px solid var(--accent);padding-left:10px;">🧠 Easy Explanation</h4>
-                            <p style="margin:10px 0;color:var(--text-secondary);">${ch.easy}</p>
-                            <div style="background:var(--bg-card);border-radius:12px;padding:14px 16px;border:1px solid var(--border-color);margin:14px 0;"><strong style="color:var(--text-primary);">🌍 Real Life Example:</strong> ${ch.real}</div>
-                            <div style="background:var(--bg-card);border-radius:12px;padding:14px 16px;border:1px solid var(--border-color);margin:14px 0;"><strong style="color:var(--text-primary);">📈 Forex Trading Example:</strong> ${ch.forexEg}</div>
-                            <h4 style="color:var(--accent);margin:16px 0 4px;font-weight:500;font-size:17px;border-left:3px solid var(--accent);padding-left:10px;">📌 Important Rules</h4>
-                            <ul style="margin:10px 0 10px 20px;color:var(--text-secondary);"><li>${ch.rules}</li></ul>
-                            <h4 style="color:var(--accent);margin:16px 0 4px;font-weight:500;font-size:17px;border-left:3px solid var(--accent);padding-left:10px;">⚠️ Common Mistakes</h4>
-                            <ul style="margin:10px 0 10px 20px;color:var(--text-secondary);"><li>${ch.mistakes}</li></ul>
-                            <h4 style="color:var(--accent);margin:16px 0 4px;font-weight:500;font-size:17px;border-left:3px solid var(--accent);padding-left:10px;">💡 Beginner Tips</h4>
-                            <ul style="margin:10px 0 10px 20px;color:var(--text-secondary);"><li>${ch.tips}</li></ul>
-                            <div style="background:var(--bg-card);border-radius:14px;padding:14px 18px;border:1px solid var(--accent-border);margin:20px 0 10px;"><strong style="color:var(--accent);">📝 Quick Revision:</strong> ${ch.revision}</div>
-                        </div>
-                    </div>
-                `;
-            }
-
-            const total = book.chapters.length;
-            const progress = ((chapterIndex + 1) / total * 100).toFixed(1);
-
-            const full = `
-                ${html}
-                <div style="width:100%;height:3px;background:var(--border-color);border-radius:8px;margin:6px 0;"><div style="height:3px;background:linear-gradient(90deg,var(--accent),#f5e7b0);border-radius:8px;width:${progress}%;transition:width 0.25s;"></div></div>
-                <div style="display:flex;justify-content:space-between;align-items:center;margin-top:22px;padding-top:14px;border-top:1px solid var(--border-color);flex-wrap:wrap;gap:8px;">
-                    <button class="nav-btn" id="prevBtn" ${chapterIndex === 0 ? 'disabled' : ''} style="background:var(--bg-card);border:1px solid var(--border-color);color:var(--text-primary);padding:8px 20px;border-radius:40px;font-weight:500;cursor:pointer;transition:0.2s;font-size:13px;opacity:${chapterIndex === 0 ? '0.3' : '1'};pointer-events:${chapterIndex === 0 ? 'none' : 'auto'};" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border-color)'">◀ Previous</button>
-                    <span style="color:var(--text-muted);font-size:13px;">${chapterIndex+1} / ${total}</span>
-                    <button class="nav-btn" id="nextBtn" ${chapterIndex === total-1 ? 'disabled' : ''} style="background:var(--bg-card);border:1px solid var(--border-color);color:var(--text-primary);padding:8px 20px;border-radius:40px;font-weight:500;cursor:pointer;transition:0.2s;font-size:13px;opacity:${chapterIndex === total-1 ? '0.3' : '1'};pointer-events:${chapterIndex === total-1 ? 'none' : 'auto'};" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border-color)'">Next ▶</button>
-                </div>
-            `;
-            renderer.innerHTML = full;
-
-            document.getElementById('prevBtn')?.addEventListener('click', () => {
-                if (chapterIndex > 0) { currentChapterIndex = chapterIndex - 1;
-                    renderCurrentBook();
-                    window.scrollTo({ top: 0, behavior: 'smooth' }); }
-            });
-            document.getElementById('nextBtn')?.addEventListener('click', () => {
-                if (chapterIndex < total - 1) { currentChapterIndex = chapterIndex + 1;
-                    renderCurrentBook();
-                    window.scrollTo({ top: 0, behavior: 'smooth' }); }
+            themeToggle.addEventListener('click', function() {
+                body.classList.toggle('light');
+                localStorage.setItem('efi-theme', body.classList.contains('light') ? 'light' : 'dark');
+                this.innerHTML = body.classList.contains('light') ? '<i class="fas fa-sun"></i>' :
+                    '<i class="fas fa-moon"></i>';
             });
 
-            document.querySelectorAll('[data-index]').forEach(el => {
-                el.addEventListener('click', function() {
-                    const idx = parseInt(this.dataset.index);
-                    if (!isNaN(idx) && idx >= 0 && idx < total) {
-                        currentChapterIndex = idx;
-                        renderCurrentBook();
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
+            // ===== LANGUAGE =====
+            let lang = localStorage.getItem('efi-lang') || 'EN';
+            document.getElementById('langToggle').textContent = lang;
+            document.getElementById('langToggle').addEventListener('click', function() {
+                const map = { EN: 'UR', UR: 'HI', HI: 'EN' };
+                lang = map[lang] || 'EN';
+                this.textContent = lang;
+                localStorage.setItem('efi-lang', lang);
+                showNotification('Language: ' + lang);
+            });
+
+            // ==========================================
+            // ADMIN PANEL - 3 TAPS ON LOGO
+            // ==========================================
+            let adminUnlocked = false;
+            const adminPanel = document.getElementById('adminPanel');
+            const adminStatus = document.getElementById('adminStatus');
+            let tapCount = 0,
+                tapTimer = null;
+
+            document.getElementById('logoTrigger').addEventListener('click', function() {
+                tapCount++;
+                clearTimeout(tapTimer);
+                tapTimer = setTimeout(() => { tapCount = 0; }, 600);
+                if (tapCount === 3) {
+                    adminPanel.classList.toggle('active');
+                    tapCount = 0;
+                    if (adminPanel.classList.contains('active')) {
+                        showPage('booksPage');
+                        setTimeout(() => {
+                            adminPanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }, 300);
+                        if (!adminUnlocked) adminStatus.textContent = '🔒 Locked - Enter password';
                     }
-                });
-            });
-        }
-
-        function renderSidebar() {
-            const list = document.getElementById('bookList');
-            list.innerHTML = '';
-            books.forEach((book) => {
-                const li = document.createElement('li');
-                li.className = book.id === currentBookId ? 'active' : '';
-                const priceLabel = book.price === 0 ?
-                    '<span class="free-tag">FREE</span>' :
-                    '<span class="price-tag">₨ ' + book.price + '</span>';
-                li.innerHTML = `${book.title} <span class="badge">${book.chapters.length}</span> ${priceLabel}`;
-                li.addEventListener('click', () => {
-                    currentBookId = book.id;
-                    currentChapterIndex = 0;
-                    renderSidebar();
-                    renderCurrentBook();
-                });
-                list.appendChild(li);
-            });
-            document.getElementById('totalBooks').textContent = books.length;
-            document.getElementById('totalTopics').textContent = books.reduce((sum, b) => sum + b.chapters.length, 0);
-        }
-
-        function renderCurrentBook() {
-            const book = books.find(b => b.id === currentBookId);
-            if (!book) {
-                if (books.length > 0) {
-                    currentBookId = books[0].id;
-                    currentChapterIndex = 0;
-                    renderCurrentBook();
                 }
-                return;
-            }
-            if (currentChapterIndex >= book.chapters.length) currentChapterIndex = 0;
-            renderBookContent(book, currentChapterIndex);
-            renderSidebar();
-        }
-
-        // ============================================================
-        // JOURNEY - With File Upload (Gallery Select)
-        // ============================================================
-        function renderJourney() {
-            const feed = document.getElementById('journeyFeed');
-            if (journeyPosts.length === 0) {
-                feed.innerHTML = `
-                    <div style="text-align:center;padding:40px 20px;color:var(--text-muted);">
-                        <div style="font-size:40px;margin-bottom:10px;">📖</div>
-                        <p>No trading posts yet.</p>
-                    </div>
-                `;
-                return;
-            }
-
-            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-
-            let html = '';
-            journeyPosts.slice().reverse().forEach((post) => {
-                const date = new Date(post.date);
-                const dayName = days[date.getDay()];
-                const formattedDate = date.toLocaleDateString('en-US', {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                });
-
-                html += `
-                    <div class="journey-post">
-                        <div class="post-header">
-                            <div class="date">📅 ${formattedDate}</div>
-                            <div class="day">${dayName}</div>
-                        </div>
-
-                        <div class="screenshot">
-                            ${post.screenshot ? 
-                                `<img src="${post.screenshot}" alt="Trade Screenshot" onerror="this.style.display='none'">` :
-                                `<div class="no-image">📸 No screenshot uploaded</div>`
-                            }
-                        </div>
-
-                        <div class="description">
-                            ${post.description || 'No description provided.'}
-                        </div>
-                    </div>
-                `;
-            });
-            feed.innerHTML = html;
-        }
-
-        // ============================================================
-        // SIGNALS
-        // ============================================================
-        function renderSignals() {
-            const area = document.getElementById('signalArea');
-            const isApproved = approvedMembers.includes('current_user');
-
-            if (!isApproved) {
-                area.innerHTML = `
-                    <div class="signal-lock">
-                        <div class="lock-icon">🔒</div>
-                        <h3>Signal Group is Locked</h3>
-                        <p>This is a premium signal group. Contact Afifa Shakeel to get access.</p>
-                        <a href="https://wa.me/923363811338" target="_blank" class="whatsapp-btn">💬 Contact on WhatsApp</a>
-                        <div style="margin-top:16px;color:var(--text-muted);font-size:13px;">
-                            <p>📱 WhatsApp: <strong style="color:var(--accent);">0336-3811338</strong></p>
-                        </div>
-                    </div>
-                `;
-                return;
-            }
-
-            if (signalPosts.length === 0) {
-                area.innerHTML = `
-                    <div style="text-align:center;padding:30px;color:var(--text-muted);">
-                        <p>No signals yet. Check back later!</p>
-                    </div>
-                `;
-                return;
-            }
-
-            let html = '';
-            signalPosts.slice().reverse().forEach((signal) => {
-                html += `
-                    <div class="signal-post">
-                        <div class="signal-meta">
-                            <span>📊 Signal</span>
-                            <span>${signal.date}</span>
-                        </div>
-                        <div class="signal-details">
-                            <div class="pair">${signal.pair}</div>
-                            <div>Direction: <strong style="color:${signal.direction === 'BUY' ? 'var(--profit)' : 'var(--loss)'}">${signal.direction}</strong></div>
-                            <div>Entry: <span class="entry">${signal.entry}</span></div>
-                            <div>SL: <span class="sl">${signal.sl}</span></div>
-                            <div>TP: <span class="tp">${signal.tp}</span></div>
-                            ${signal.notes ? `<div style="color:var(--text-muted);margin-top:4px;">📝 ${signal.notes}</div>` : ''}
-                        </div>
-                    </div>
-                `;
-            });
-            area.innerHTML = html;
-        }
-
-        // ============================================================
-        // SOCIAL
-        // ============================================================
-        function renderSocial() {
-            const grid = document.getElementById('socialGrid');
-            const embed = document.getElementById('socialEmbed');
-
-            let html = '';
-            socialAccounts.forEach(acc => {
-                const statusMap = {
-                    'available': '✅ Available',
-                    'coming': '🔜 Coming Soon',
-                    'embed': '📺 Embedded'
-                };
-                const statusClass = acc.status === 'available' ? 'available' : acc.status === 'embed' ? 'embed' :
-                'coming';
-                const clickAction = acc.url ? `window.open('${acc.url}','_blank')` : '';
-                html += `
-                    <div class="social-card" onclick="${clickAction}">
-                        <div class="social-icon">${acc.icon}</div>
-                        <div class="social-name">${acc.name}</div>
-                        <div class="social-status ${statusClass}">${statusMap[acc.status] || '🔜 Coming Soon'}</div>
-                    </div>
-                `;
-            });
-            grid.innerHTML = html;
-
-            const hasEmbed = socialAccounts.some(a => a.embed && a.embed.trim() !== '');
-            if (hasEmbed) {
-                let embedHtml = '<h3 style="color:var(--accent);margin-bottom:10px;">📺 Social Feeds</h3>';
-                socialAccounts.forEach(a => {
-                    if (a.embed && a.embed.trim() !== '') {
-                        embedHtml +=
-                            `<div style="margin-bottom:16px;"><h4 style="color:var(--text-secondary);margin-bottom:6px;">${a.icon} ${a.name}</h4>${a.embed}</div>`;
-                    }
-                });
-                embed.innerHTML = embedHtml;
-                embed.style.display = 'block';
-            } else {
-                embed.innerHTML = '';
-                embed.style.display = 'none';
-            }
-        }
-
-        // ============================================================
-        // ADMIN PANEL
-        // ============================================================
-        function renderAdmin() {
-            const container = document.getElementById('adminContent');
-            if (!isAdminLoggedIn) {
-                container.innerHTML = `
-                    <div class="login-box">
-                        <h2 style="color:var(--accent);">🔐 Admin Login</h2>
-                        <p style="color:var(--text-muted);margin:10px 0;">Enter password to manage everything</p>
-                        <input type="password" id="adminPass" placeholder="Enter admin password...">
-                        <button class="btn-login" onclick="adminLogin()">Login</button>
-                    </div>
-                `;
-                return;
-            }
-
-            const book = books.find(b => b.id === currentBookId);
-            let html = `
-                <h2>🔐 Admin Panel</h2>
-                <p style="color:var(--text-muted);font-size:13px;">Manage Books, Signals, Social Accounts & More</p>
-
-                <hr style="border-color:var(--border-color);margin:12px 0;">
-
-                <!-- ===== ADD NEW BOOK ===== -->
-                <h3 style="color:var(--accent);margin:10px 0;">📚 Add New Book</h3>
-                <div style="background:var(--bg-card);padding:16px;border-radius:12px;border:1px solid var(--border-color);">
-                    <label>Book Title</label>
-                    <input type="text" id="newBookTitle" placeholder="e.g., Advanced Forex Strategies">
-
-                    <label>Author</label>
-                    <input type="text" id="newBookAuthor" placeholder="Author Name" value="Afifa Shakeel">
-
-                    <label>Price (0 = FREE)</label>
-                    <input type="number" id="newBookPrice" placeholder="0" value="0">
-
-                    <label>Book Description</label>
-                    <textarea id="newBookDesc" placeholder="Write book description here..." style="min-height:80px;"></textarea>
-
-                    <div class="btn-group">
-                        <button class="btn-save" onclick="addBook()">➕ Add Book</button>
-                    </div>
-                </div>
-
-                <!-- ===== ADD CHAPTER ===== -->
-                <h3 style="color:var(--accent);margin:16px 0 8px;">📝 Add Chapter to "${book ? book.title : 'Current Book'}"</h3>
-                <div style="background:var(--bg-card);padding:16px;border-radius:12px;border:1px solid var(--border-color);">
-                    <label>Chapter Title</label>
-                    <input type="text" id="newChapterTitle" placeholder="e.g., What is a Pip?">
-
-                    <label>Definition</label>
-                    <textarea id="newChapterDef" placeholder="Simple definition..."></textarea>
-
-                    <label>Why Important</label>
-                    <textarea id="newChapterWhy" placeholder="Why this matters..."></textarea>
-
-                    <label>Easy Explanation</label>
-                    <textarea id="newChapterEasy" placeholder="Easy to understand explanation..."></textarea>
-
-                    <label>Real Life Example</label>
-                    <textarea id="newChapterReal" placeholder="Real world example..."></textarea>
-
-                    <label>Forex Trading Example</label>
-                    <textarea id="newChapterForex" placeholder="Trading example..."></textarea>
-
-                    <label>Rules</label>
-                    <textarea id="newChapterRules" placeholder="Important rules..."></textarea>
-
-                    <label>Common Mistakes</label>
-                    <textarea id="newChapterMistakes" placeholder="Common mistakes..."></textarea>
-
-                    <label>Beginner Tips</label>
-                    <textarea id="newChapterTips" placeholder="Tips for beginners..."></textarea>
-
-                    <label>Quick Revision</label>
-                    <textarea id="newChapterRevision" placeholder="One line summary..."></textarea>
-
-                    <div class="btn-group">
-                        <button class="btn-save" onclick="addChapter()">➕ Add Chapter</button>
-                    </div>
-                </div>
-
-                <hr style="border-color:var(--border-color);margin:16px 0;">
-
-                <!-- ===== TRADING JOURNEY - With File Upload ===== -->
-                <h3 style="color:var(--accent);margin:10px 0;">📖 Trading Journey - New Post</h3>
-                <div style="background:var(--bg-card);padding:16px;border-radius:12px;border:1px solid var(--border-color);">
-                    <p style="color:var(--text-muted);font-size:13px;margin-bottom:10px;">📸 Select screenshot from gallery or take photo</p>
-                    
-                    <label>📸 Screenshot</label>
-                    <input type="file" id="jpScreenshotFile" accept="image/*" capture="environment" onchange="previewScreenshot(event)">
-                    <div id="screenshotPreview"></div>
-
-                    <label>📝 Description</label>
-                    <textarea id="jpDescription" placeholder="Write about your trade..." style="min-height:80px;"></textarea>
-
-                    <div class="btn-group">
-                        <button class="btn-save" onclick="addJourneyPost()">📤 Post Trade</button>
-                    </div>
-                </div>
-
-                <hr style="border-color:var(--border-color);margin:16px 0;">
-
-                <!-- ===== MANAGE SIGNALS ===== -->
-                <h3 style="color:var(--accent);margin:10px 0;">📊 Manage Signals</h3>
-                <div style="background:var(--bg-card);padding:16px;border-radius:12px;border:1px solid var(--border-color);">
-                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-                        <input type="text" id="sigPair" placeholder="Pair (e.g., EUR/USD)" style="grid-column:span 2;">
-                        <select id="sigDirection">
-                            <option value="BUY">BUY</option>
-                            <option value="SELL">SELL</option>
-                        </select>
-                        <input type="text" id="sigEntry" placeholder="Entry">
-                        <input type="text" id="sigSl" placeholder="SL">
-                        <input type="text" id="sigTp" placeholder="TP" style="grid-column:span 2;">
-                        <textarea id="sigNotes" placeholder="Notes (optional)" style="grid-column:span 2;min-height:50px;"></textarea>
-                    </div>
-                    <div class="btn-group">
-                        <button class="btn-save" onclick="addSignal()">📤 Add Signal</button>
-                    </div>
-                </div>
-
-                <hr style="border-color:var(--border-color);margin:16px 0;">
-
-                <!-- ===== PENDING PAYMENTS ===== -->
-                <h3 style="color:var(--accent);margin:10px 0;">💰 Pending Payments</h3>
-                ${payments.length === 0 ? '<p style="color:var(--text-muted);">No pending payments.</p>' : ''}
-                ${payments.map((p, idx) => `
-                    <div class="payment-item">
-                        <div>
-                            <strong>${p.item}</strong>
-                            <br><small>₨ ${p.amount} • ${p.buyer || 'Anonymous'} • ${p.date}</small>
-                        </div>
-                        <button class="approve-btn" onclick="approvePayment(${idx})">✅ Approve</button>
-                    </div>
-                `).join('')}
-
-                <hr style="border-color:var(--border-color);margin:16px 0;">
-
-                <!-- ===== MEMBER MANAGEMENT ===== -->
-                <h3 style="color:var(--accent);margin:10px 0;">👥 Member Management</h3>
-                ${members.length === 0 ? '<p style="color:var(--text-muted);">No pending members.</p>' : ''}
-                ${members.map((m, idx) => `
-                    <div class="payment-item">
-                        <div>
-                            <strong>${m.name}</strong>
-                            <br><small>${m.email} • ${m.date}</small>
-                        </div>
-                        <div>
-                            <button class="approve-btn" onclick="approveMember(${idx})">✅ Approve</button>
-                            <button onclick="rejectMember(${idx})" style="color:var(--loss);cursor:pointer;">❌</button>
-                        </div>
-                    </div>
-                `).join('')}
-                <div style="margin-top:10px;color:var(--text-muted);font-size:13px;">
-                    Approved Members: ${approvedMembers.length}
-                </div>
-
-                <hr style="border-color:var(--border-color);margin:16px 0;">
-
-                <!-- ===== SOCIAL ACCOUNTS ===== -->
-                <h3 style="color:var(--accent);margin:10px 0;">🌐 Social Accounts</h3>
-                <p style="color:var(--text-muted);font-size:13px;">Add your social media links and embed codes</p>
-                ${socialAccounts.map((acc, idx) => `
-                    <div style="background:var(--bg-card);padding:10px;border-radius:10px;margin:6px 0;border-left:3px solid var(--accent);">
-                        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;">
-                            <span><strong>${acc.icon} ${acc.name}</strong> <small style="color:var(--text-muted);">(${acc.status})</small></span>
-                            <button onclick="editSocial(${idx})" style="background:var(--accent);color:#0a0907;border:none;padding:4px 12px;border-radius:20px;cursor:pointer;">✏️ Edit</button>
-                        </div>
-                    </div>
-                `).join('')}
-
-                <div style="margin-top:10px;background:var(--bg-card);padding:16px;border-radius:12px;border:1px solid var(--border-color);">
-                    <label>Edit Selected Social Account</label>
-                    <input type="text" id="socialName" placeholder="Name (e.g., YouTube)">
-                    <input type="text" id="socialIcon" placeholder="Icon (e.g., ▶️)">
-                    <input type="text" id="socialUrl" placeholder="URL (e.g., https://youtube.com/...)" style="margin-top:6px;">
-                    <textarea id="socialEmbed" placeholder="Embed Code (iframe or HTML)" style="margin-top:6px;min-height:60px;"></textarea>
-                    <select id="socialStatus" style="margin-top:6px;">
-                        <option value="coming">Coming Soon</option>
-                        <option value="available">Available</option>
-                        <option value="embed">Embedded</option>
-                    </select>
-                    <div class="btn-group">
-                        <button class="btn-save" onclick="updateSocial()">💾 Update Social</button>
-                    </div>
-                </div>
-
-                <hr style="border-color:var(--border-color);margin:16px 0;">
-
-                <!-- ===== ALL BOOKS ===== -->
-                <h3 style="color:var(--accent);margin:10px 0;">📚 All Books</h3>
-                ${books.map(b => `
-                    <div class="book-item">
-                        <div>
-                            <strong>${b.title}</strong>
-                            <br><small>${b.chapters.length} topics • ${b.price === 0 ? 'FREE' : '₨ ' + b.price}</small>
-                        </div>
-                        <div>
-                            <button onclick="selectBook('${b.id}')" title="Open">📖</button>
-                            <button onclick="deleteBook('${b.id}')" title="Delete">🗑️</button>
-                        </div>
-                    </div>
-                `).join('')}
-
-                <div class="btn-group">
-                    <button class="btn-close" onclick="closeAdmin()">❌ Close</button>
-                    <button class="btn-danger" onclick="adminLogout()">🚪 Logout</button>
-                </div>
-            `;
-
-            container.innerHTML = html;
-        }
-
-        // ============================================================
-        // SCREENSHOT PREVIEW
-        // ============================================================
-        let selectedScreenshot = null;
-
-        function previewScreenshot(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                selectedScreenshot = e.target.result;
-                const preview = document.getElementById('screenshotPreview');
-                preview.innerHTML = `<img src="${selectedScreenshot}" class="preview-img" alt="Screenshot Preview">`;
-            };
-            reader.readAsDataURL(file);
-        }
-
-        // Admin Functions
-        function adminLogin() {
-            const pass = document.getElementById('adminPass')?.value;
-            if (pass === ADMIN_PASSWORD) {
-                isAdminLoggedIn = true;
-                renderAdmin();
-            } else {
-                alert('❌ Wrong password!');
-            }
-        }
-
-        function adminLogout() {
-            isAdminLoggedIn = false;
-            renderAdmin();
-        }
-
-        function closeAdmin() {
-            document.getElementById('adminOverlay').classList.remove('show');
-            document.getElementById('paymentOverlay').classList.remove('show');
-        }
-
-        // ============================================================
-        // ADD BOOK
-        // ============================================================
-        function addBook() {
-            const title = document.getElementById('newBookTitle')?.value.trim();
-            const author = document.getElementById('newBookAuthor')?.value.trim() || 'Afifa Shakeel';
-            const price = parseInt(document.getElementById('newBookPrice')?.value) || 0;
-            const description = document.getElementById('newBookDesc')?.value.trim() || '';
-            if (!title) { alert('Please enter book title'); return; }
-            const newBook = {
-                id: 'book_' + Date.now(),
-                title: title,
-                author: author,
-                price: price,
-                description: description,
-                chapters: [
-                    { id: 0, title: "Cover Page", type: "cover" },
-                    { id: 1, title: "About This Course", type: "about" },
-                    { id: 2, title: "Table of Contents", type: "toc" }
-                ]
-            };
-            books.push(newBook);
-            saveData();
-            currentBookId = newBook.id;
-            currentChapterIndex = 0;
-            renderSidebar();
-            renderCurrentBook();
-            renderAdmin();
-            alert('✅ Book added!');
-            document.getElementById('newBookTitle').value = '';
-            document.getElementById('newBookDesc').value = '';
-        }
-
-        // ============================================================
-        // ADD CHAPTER
-        // ============================================================
-        function addChapter() {
-            const book = books.find(b => b.id === currentBookId);
-            if (!book) { alert('Please select a book first'); return; }
-
-            const title = document.getElementById('newChapterTitle')?.value.trim();
-            const def = document.getElementById('newChapterDef')?.value.trim();
-            const why = document.getElementById('newChapterWhy')?.value.trim();
-            const easy = document.getElementById('newChapterEasy')?.value.trim();
-            const real = document.getElementById('newChapterReal')?.value.trim();
-            const forexEg = document.getElementById('newChapterForex')?.value.trim();
-            const rules = document.getElementById('newChapterRules')?.value.trim();
-            const mistakes = document.getElementById('newChapterMistakes')?.value.trim();
-            const tips = document.getElementById('newChapterTips')?.value.trim();
-            const revision = document.getElementById('newChapterRevision')?.value.trim();
-
-            if (!title || !def || !why || !easy || !real || !forexEg || !rules || !mistakes || !tips || !revision) {
-                alert('❌ Please fill in all fields!');
-                return;
-            }
-
-            book.chapters.push({
-                id: book.chapters.length,
-                title, def, why, easy, real, forexEg, rules, mistakes, tips, revision
-            });
-            saveData();
-            currentChapterIndex = book.chapters.length - 1;
-            renderSidebar();
-            renderCurrentBook();
-            renderAdmin();
-            alert('✅ Chapter added!');
-            // Clear fields
-            document.getElementById('newChapterTitle').value = '';
-            document.getElementById('newChapterDef').value = '';
-            document.getElementById('newChapterWhy').value = '';
-            document.getElementById('newChapterEasy').value = '';
-            document.getElementById('newChapterReal').value = '';
-            document.getElementById('newChapterForex').value = '';
-            document.getElementById('newChapterRules').value = '';
-            document.getElementById('newChapterMistakes').value = '';
-            document.getElementById('newChapterTips').value = '';
-            document.getElementById('newChapterRevision').value = '';
-        }
-
-        // ============================================================
-        // ADD JOURNEY POST - With File Upload
-        // ============================================================
-        function addJourneyPost() {
-            const description = document.getElementById('jpDescription')?.value.trim();
-
-            if (!description) {
-                alert('❌ Please write a description!');
-                return;
-            }
-
-            // Use selected screenshot (base64) or empty
-            const screenshot = selectedScreenshot || '';
-
-            journeyPosts.push({
-                screenshot: screenshot,
-                description: description,
-                date: new Date().toISOString()
             });
 
-            saveData();
-            renderJourney();
-            renderAdmin();
-            alert('✅ Trade posted successfully!');
-
-            // Reset form
-            document.getElementById('jpDescription').value = '';
-            document.getElementById('jpScreenshotFile').value = '';
-            document.getElementById('screenshotPreview').innerHTML = '';
-            selectedScreenshot = null;
-        }
-
-        // ============================================================
-        // DELETE BOOK
-        // ============================================================
-        function deleteBook(bookId) {
-            if (!confirm('Delete this book permanently?')) return;
-            books = books.filter(b => b.id !== bookId);
-            saveData();
-            if (currentBookId === bookId) {
-                currentBookId = books.length > 0 ? books[0].id : null;
-                currentChapterIndex = 0;
-            }
-            renderSidebar();
-            renderCurrentBook();
-            renderAdmin();
-        }
-
-        function selectBook(bookId) {
-            currentBookId = bookId;
-            currentChapterIndex = 0;
-            renderSidebar();
-            renderCurrentBook();
-            renderAdmin();
-            closeAdmin();
-        }
-
-        // ============================================================
-        // ADD SIGNAL
-        // ============================================================
-        function addSignal() {
-            const pair = document.getElementById('sigPair')?.value.trim();
-            const direction = document.getElementById('sigDirection')?.value;
-            const entry = document.getElementById('sigEntry')?.value.trim();
-            const sl = document.getElementById('sigSl')?.value.trim();
-            const tp = document.getElementById('sigTp')?.value.trim();
-            const notes = document.getElementById('sigNotes')?.value.trim();
-
-            if (!pair || !entry || !sl || !tp) {
-                alert('Please fill in all signal fields!');
-                return;
-            }
-
-            signalPosts.push({
-                pair, direction, entry, sl, tp, notes,
-                date: new Date().toLocaleString()
+            document.getElementById('adminUnlockBtn').addEventListener('click', function() {
+                const pass = document.getElementById('adminPasswordInput').value.trim();
+                if (pass === 'efi2024') {
+                    adminUnlocked = true;
+                    adminStatus.textContent = '✅ Unlocked';
+                    adminStatus.style.color = '#4CAF50';
+                    document.getElementById('adminPasswordInput').value = '';
+                    showNotification('✅ Admin unlocked');
+                    renderAdminSocial();
+                } else {
+                    adminStatus.textContent = '❌ Wrong password';
+                    adminStatus.style.color = '#ff6b6b';
+                    setTimeout(() => {
+                        adminStatus.textContent = '🔒 Locked - Enter password';
+                        adminStatus.style.color = '';
+                    }, 2000);
+                }
             });
-            saveData();
-            renderSignals();
-            renderAdmin();
-            alert('✅ Signal added!');
-            document.getElementById('sigPair').value = '';
-            document.getElementById('sigEntry').value = '';
-            document.getElementById('sigSl').value = '';
-            document.getElementById('sigTp').value = '';
-            document.getElementById('sigNotes').value = '';
-        }
 
-        // ============================================================
-        // PAYMENT & MEMBER FUNCTIONS
-        // ============================================================
-        function approvePayment(index) {
-            const payment = payments[index];
-            if (!payment) return;
-            payments.splice(index, 1);
-            saveData();
-            renderAdmin();
-            alert(`✅ Payment approved! User can now access ${payment.item}`);
-        }
+            // ==========================================
+            // SOCIAL MEDIA
+            // ==========================================
+            const socialLinks = [
+                { id: 1, name: 'YouTube', icon: 'fab fa-youtube', color: '#FF0000',
+                    url: 'https://www.youtube.com/@ozi1001ozi', handle: '@ozi1001ozi' },
+                { id: 2, name: 'Instagram', icon: 'fab fa-instagram', color: '#E4405F',
+                    url: 'https://www.instagram.com/efiii453?igsh=dG84Zm43bG5zeW1n', handle: '@efiii453' },
+                { id: 3, name: 'Facebook', icon: 'fab fa-facebook', color: '#1877F2',
+                    url: 'https://www.facebook.com/share/1CGPyaVmfp/', handle: 'EFI Trader' },
+                { id: 4, name: 'TikTok', icon: 'fab fa-tiktok', color: '#000000', url: '#', handle: '@efitrader' },
+                { id: 5, name: 'WhatsApp', icon: 'fab fa-whatsapp', color: '#25D366', url: '#', handle: '0336-3811338' },
+                { id: 6, name: 'Telegram', icon: 'fab fa-telegram', color: '#26A5E4', url: '#', handle: 'EFI Trader' }
+            ];
 
-        function approveMember(index) {
-            const member = members[index];
-            if (!member) return;
-            approvedMembers.push(member.email);
-            members.splice(index, 1);
-            saveData();
-            renderAdmin();
-            renderSignals();
-            alert(`✅ ${member.name} approved! They can now see signals.`);
-        }
+            const socialGrid = document.getElementById('socialGrid');
 
-        function rejectMember(index) {
-            members.splice(index, 1);
-            saveData();
-            renderAdmin();
-        }
-
-        // ============================================================
-        // SOCIAL FUNCTIONS
-        // ============================================================
-        let editingSocialIndex = -1;
-
-        function editSocial(index) {
-            editingSocialIndex = index;
-            const acc = socialAccounts[index];
-            document.getElementById('socialName').value = acc.name || '';
-            document.getElementById('socialIcon').value = acc.icon || '';
-            document.getElementById('socialUrl').value = acc.url || '';
-            document.getElementById('socialEmbed').value = acc.embed || '';
-            document.getElementById('socialStatus').value = acc.status || 'coming';
-            document.getElementById('socialName').focus();
-        }
-
-        function updateSocial() {
-            if (editingSocialIndex < 0 || editingSocialIndex >= socialAccounts.length) {
-                alert('Please select a social account first by clicking Edit');
-                return;
+            function renderSocial() {
+                socialGrid.innerHTML = socialLinks.map(s => `
+                        <a href="${s.url}" target="_blank" class="social-card">
+                            <span class="icon" style="color:${s.color};"><i class="${s.icon}"></i></span>
+                            <span class="name">${s.name}</span>
+                            <span class="handle">${s.handle}</span>
+                        </a>
+                    `).join('');
             }
-            const name = document.getElementById('socialName').value.trim();
-            const icon = document.getElementById('socialIcon').value.trim();
-            const url = document.getElementById('socialUrl').value.trim();
-            const embed = document.getElementById('socialEmbed').value.trim();
-            const status = document.getElementById('socialStatus').value;
-
-            if (!name) { alert('Please enter a name'); return; }
-
-            socialAccounts[editingSocialIndex] = {
-                name: name,
-                icon: icon || '🔗',
-                url: url,
-                embed: embed,
-                status: status
-            };
-
-            saveData();
             renderSocial();
-            renderAdmin();
-            alert('✅ Social account updated!');
-            editingSocialIndex = -1;
-            document.getElementById('socialName').value = '';
-            document.getElementById('socialIcon').value = '';
-            document.getElementById('socialUrl').value = '';
-            document.getElementById('socialEmbed').value = '';
-        }
 
-        // ============================================================
-        // TAB SWITCHING
-        // ============================================================
-        document.querySelectorAll('.nav-tab').forEach(tab => {
-            tab.addEventListener('click', function() {
-                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
-                const target = this.dataset.tab;
-                document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
-                document.getElementById(`tab-${target}`).classList.add('active');
-
-                if (target === 'journey') renderJourney();
-                if (target === 'signals') renderSignals();
-                if (target === 'books') renderCurrentBook();
-                if (target === 'social') renderSocial();
-            });
-        });
-
-        // ============================================================
-        // SEARCH
-        // ============================================================
-        function searchTopic() {
-            const q = document.getElementById('searchInput').value.trim().toLowerCase();
-            if (!q) return;
-            const book = books.find(b => b.id === currentBookId);
-            if (!book) return;
-            for (let i = 0; i < book.chapters.length; i++) {
-                if (book.chapters[i].title && book.chapters[i].title.toLowerCase().includes(q)) {
-                    currentChapterIndex = i;
-                    renderCurrentBook();
-                    document.querySelector('[data-tab="books"]').click();
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
+            // ==========================================
+            // ADMIN SOCIAL
+            // ==========================================
+            function renderAdminSocial() {
+                const container = document.getElementById('adminSocialList');
+                if (!adminUnlocked) {
+                    container.innerHTML =
+                    '<p style="opacity:0.3; font-size:13px;">🔒 Unlock admin to manage social links</p>';
                     return;
                 }
+                container.innerHTML = socialLinks.map(s => `
+                        <div class="admin-social-card">
+                            <div class="social-info">
+                                <span class="s-icon" style="color:${s.color};"><i class="${s.icon}"></i></span>
+                                <span class="s-name">${s.name}</span>
+                                <span class="s-link">${s.url}</span>
+                            </div>
+                            <div class="s-actions">
+                                <button class="edit-social" data-id="${s.id}"><i class="fas fa-edit"></i></button>
+                                <button class="del-social" data-id="${s.id}"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                    `).join('');
+
+                document.querySelectorAll('.del-social').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const id = parseInt(this.dataset.id);
+                        if (confirm('Delete this social link?')) {
+                            const idx = socialLinks.findIndex(s => s.id === id);
+                            if (idx > -1) {
+                                socialLinks.splice(idx, 1);
+                                renderSocial();
+                                renderAdminSocial();
+                                showNotification('Social link deleted');
+                            }
+                        }
+                    });
+                });
+
+                document.querySelectorAll('.edit-social').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const id = parseInt(this.dataset.id);
+                        const social = socialLinks.find(s => s.id === id);
+                        if (social) {
+                            const newUrl = prompt('Enter new URL for ' + social.name + ':', social.url);
+                            if (newUrl !== null && newUrl.trim()) {
+                                social.url = newUrl.trim();
+                                renderSocial();
+                                renderAdminSocial();
+                                showNotification('Social link updated');
+                            }
+                        }
+                    });
+                });
             }
-            alert('❌ Topic not found.');
-        }
 
-        // ============================================================
-        // INIT
-        // ============================================================
-        loadData();
-        loadTheme();
+            document.getElementById('adminAddSocial').addEventListener('click', function() {
+                if (!adminUnlocked) { showNotification('🔒 Admin locked'); return; }
+                const name = prompt('Enter social media name:');
+                if (!name || !name.trim()) return;
+                const url = prompt('Enter URL:');
+                if (!url || !url.trim()) return;
+                const icon = prompt('Enter FontAwesome icon class (e.g. fab fa-twitter):', 'fab fa-twitter');
+                if (!icon || !icon.trim()) return;
+                const color = prompt('Enter color hex (e.g. #1DA1F2):', '#000000');
 
-        if (books.length > 0) {
-            currentBookId = books[0].id;
-            currentChapterIndex = 0;
-        }
+                socialLinks.push({
+                    id: Date.now(),
+                    name: name.trim(),
+                    icon: icon.trim(),
+                    color: color || '#000000',
+                    url: url.trim(),
+                    handle: name.trim()
+                });
+                renderSocial();
+                renderAdminSocial();
+                showNotification('Social link added!');
+            });
 
-        renderSidebar();
-        renderCurrentBook();
-        renderJourney();
-        renderSignals();
-        renderSocial();
+            // ==========================================
+            // BOOKS - SEPARATE CARDS
+            // ==========================================
+            let books = [];
+            const booksGrid = document.getElementById('booksGrid');
 
-        // Event Listeners
-        document.getElementById('themeToggle').addEventListener('click', toggleTheme);
-        document.getElementById('searchBtn').addEventListener('click', searchTopic);
-        document.getElementById('searchInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') searchTopic(); });
-        document.getElementById('backTop').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+            function renderBooks() {
+                if (books.length === 0) {
+                    booksGrid.innerHTML = `
+                            <div style="grid-column: span 1; text-align:center; padding:40px; opacity:0.25; border:1px dashed rgba(201,168,76,0.1); border-radius:var(--radius);">
+                                <i class="fas fa-book" style="font-size:40px; display:block; margin-bottom:12px;"></i>
+                                No books available. Admin can upload one.
+                            </div>
+                        `;
+                    return;
+                }
 
-        document.getElementById('adminOverlay').addEventListener('click', (e) => {
-            if (e.target === e.currentTarget) closeAdmin();
-        });
+                booksGrid.innerHTML = books.map((book, index) => `
+                        <div class="book-card ${adminUnlocked ? '' : 'admin-hidden'}">
+                            <div class="book-icon"><i class="fas fa-book-open"></i></div>
+                            <div class="book-title">${book.title}</div>
+                            <div class="book-desc">${book.description || 'No description provided.'}</div>
+                            <div class="book-meta"><i class="far fa-file-pdf"></i> PDF • ${book.pdf ? book.pdf : 'No PDF attached'}</div>
+                            <div class="book-actions">
+                                ${book.pdfData ? `<a href="${book.pdfData}" target="_blank" class="pdf-btn"><i class="fas fa-download"></i> Download PDF</a>` : '<span style="opacity:0.2; font-size:13px;">No PDF</span>'}
+                                ${adminUnlocked ? `<button class="delete-btn" data-index="${index}"><i class="fas fa-trash"></i></button>` : ''}
+                            </div>
+                        </div>
+                    `).join('');
 
-        document.getElementById('paymentOverlay').addEventListener('click', (e) => {
-            if (e.target === e.currentTarget) closePayment();
-        });
+                // Delete event
+                document.querySelectorAll('.delete-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        if (!adminUnlocked) { showNotification('🔒 Admin locked'); return; }
+                        const idx = parseInt(this.dataset.index);
+                        if (confirm('Delete this book?')) {
+                            books.splice(idx, 1);
+                            saveBooks();
+                            renderBooks();
+                            showNotification('Book deleted');
+                        }
+                    });
+                });
+            }
 
-        console.log('🏛️ EFI Trader Loaded!');
-        console.log('📚 Books:', books.length);
-        console.log('📖 Journey Posts:', journeyPosts.length);
-        console.log('📊 Signals:', signalPosts.length);
-        console.log('👥 Members:', members.length);
-        console.log('✅ Approved:', approvedMembers.length);
-        console.log('🔑 Admin: Click Logo 3 times | Password: efi2024');
-        console.log('📱 WhatsApp: 0336-3811338');
-        console.log('💳 JazzCash/UPAISA: 03194168658 (Afifa Shakeel)');
-        console.log('📖 Total Topics in First Book:', books[0]?.chapters?.length || 0);
+            function saveBooks() {
+                localStorage.setItem('efi_books', JSON.stringify(books));
+            }
+
+            function loadBooks() {
+                const saved = localStorage.getItem('efi_books');
+                if (saved) {
+                    try { books = JSON.parse(saved); } catch (e) { books = []; }
+                }
+                if (books.length === 0) {
+                    // Default book
+                    books.push({
+                        id: Date.now(),
+                        title: 'Beginner Forex Course',
+                        description: 'Complete Forex trading course for beginners. Learn from basics to advanced strategies.',
+                        pdf: 'Beginner_Forex_Course.pdf',
+                        pdfData: null
+                    });
+                    saveBooks();
+                }
+                renderBooks();
+            }
+            loadBooks();
+
+            // ==========================================
+            // ADMIN: ADD BOOK - Name → Description → PDF
+            // ==========================================
+            const bookForm = document.getElementById('adminBookForm');
+            document.getElementById('adminShowBookForm').addEventListener('click', function() {
+                if (!adminUnlocked) { showNotification('🔒 Admin locked'); return; }
+                bookForm.classList.toggle('active');
+                this.textContent = bookForm.classList.contains('active') ? 'Hide Form' : 'Add Book';
+            });
+
+            document.getElementById('cancelBookBtn').addEventListener('click', function() {
+                bookForm.classList.remove('active');
+                document.getElementById('adminShowBookForm').textContent = 'Add Book';
+                document.getElementById('bookNameInput').value = '';
+                document.getElementById('bookDescInput').value = '';
+                document.getElementById('bookPdfInput').value = '';
+            });
+
+            document.getElementById('submitBookBtn').addEventListener('click', function() {
+                if (!adminUnlocked) { showNotification('🔒 Admin locked'); return; }
+
+                const title = document.getElementById('bookNameInput').value.trim();
+                const description = document.getElementById('bookDescInput').value.trim();
+                const fileInput = document.getElementById('bookPdfInput');
+                const file = fileInput.files[0];
+
+                if (!title) { showNotification('Please enter book name'); return; }
+                if (!description) { showNotification('Please enter book description'); return; }
+
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        books.push({
+                            id: Date.now(),
+                            title: title,
+                            description: description,
+                            pdf: file.name,
+                            pdfData: e.target.result
+                        });
+                        saveBooks();
+                        renderBooks();
+                        showNotification('✅ Book "' + title + '" uploaded successfully!');
+                        bookForm.classList.remove('active');
+                        document.getElementById('adminShowBookForm').textContent = 'Add Book';
+                        document.getElementById('bookNameInput').value = '';
+                        document.getElementById('bookDescInput').value = '';
+                        document.getElementById('bookPdfInput').value = '';
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    books.push({
+                        id: Date.now(),
+                        title: title,
+                        description: description,
+                        pdf: null,
+                        pdfData: null
+                    });
+                    saveBooks();
+                    renderBooks();
+                    showNotification('✅ Book "' + title + '" uploaded successfully!');
+                    bookForm.classList.remove('active');
+                    document.getElementById('adminShowBookForm').textContent = 'Add Book';
+                    document.getElementById('bookNameInput').value = '';
+                    document.getElementById('bookDescInput').value = '';
+                }
+            });
+
+            document.getElementById('adminDeleteAllBooks').addEventListener('click', function() {
+                if (!adminUnlocked) { showNotification('🔒 Admin locked'); return; }
+                if (confirm('⚠️ Delete ALL books?')) {
+                    books = [];
+                    saveBooks();
+                    renderBooks();
+                    showNotification('All books deleted');
+                }
+            });
+
+            // ==========================================
+            // TRADING JOURNEY - SOCIAL FEED STYLE
+            // ==========================================
+            let journeyPosts = [];
+            const journeyFeed = document.getElementById('journeyFeed');
+
+            function renderJourney() {
+                if (journeyPosts.length === 0) {
+                    journeyFeed.innerHTML = `
+                            <div style="text-align:center; padding:40px; opacity:0.25; border:1px dashed rgba(201,168,76,0.1); border-radius:var(--radius);">
+                                <i class="fas fa-road" style="font-size:40px; display:block; margin-bottom:12px;"></i>
+                                No journey posts yet. Admin can add one.
+                            </div>
+                        `;
+                    return;
+                }
+
+                journeyFeed.innerHTML = journeyPosts.map((post, index) => `
+                        <div class="journey-card ${adminUnlocked ? '' : 'admin-hidden'}">
+                            <div class="post-header">
+                                <div class="post-avatar">A</div>
+                                <div>
+                                    <div class="post-user">Admin</div>
+                                    <div class="post-time"><i class="far fa-clock"></i> ${post.time}</div>
+                                </div>
+                            </div>
+                            ${post.image ? `<img src="${post.image}" alt="Post image" class="post-image" />` : `<div class="post-image-placeholder"><i class="fas fa-image"></i></div>`}
+                            <div class="post-description">${post.description}</div>
+                            <div class="post-actions">
+                                <button><i class="far fa-heart"></i> Like</button>
+                                <button><i class="far fa-comment"></i> Comment</button>
+                                ${adminUnlocked ? `<button class="delete-btn" data-index="${index}"><i class="fas fa-trash"></i> Delete</button>` : ''}
+                            </div>
+                        </div>
+                    `).join('');
+
+                document.querySelectorAll('.delete-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        if (!adminUnlocked) { showNotification('🔒 Admin locked'); return; }
+                        const idx = parseInt(this.dataset.index);
+                        if (confirm('Delete this post?')) {
+                            journeyPosts.splice(idx, 1);
+                            saveJourney();
+                            renderJourney();
+                            showNotification('Post deleted');
+                        }
+                    });
+                });
+            }
+
+            function saveJourney() {
+                localStorage.setItem('efi_journey', JSON.stringify(journeyPosts));
+            }
+
+            function loadJourney() {
+                const saved = localStorage.getItem('efi_journey');
+                if (saved) {
+                    try { journeyPosts = JSON.parse(saved); } catch (e) { journeyPosts = []; }
+                }
+                renderJourney();
+            }
+            loadJourney();
+
+            // ==========================================
+            // ADMIN: ADD JOURNEY POST
+            // ==========================================
+            const journeyForm = document.getElementById('adminJourneyForm');
+            document.getElementById('adminShowJourneyForm').addEventListener('click', function() {
+                if (!adminUnlocked) { showNotification('🔒 Admin locked'); return; }
+                journeyForm.classList.toggle('active');
+                this.textContent = journeyForm.classList.contains('active') ? 'Hide Form' : 'Add Post';
+            });
+
+            document.getElementById('cancelJourneyBtn').addEventListener('click', function() {
+                journeyForm.classList.remove('active');
+                document.getElementById('adminShowJourneyForm').textContent = 'Add Post';
+                document.getElementById('journeyDescInput').value = '';
+                document.getElementById('journeyImageInput').value = '';
+            });
+
+            document.getElementById('submitJourneyBtn').addEventListener('click', function() {
+                if (!adminUnlocked) { showNotification('🔒 Admin locked'); return; }
+
+                const description = document.getElementById('journeyDescInput').value.trim();
+                const fileInput = document.getElementById('journeyImageInput');
+                const file = fileInput.files[0];
+
+                if (!description) { showNotification('Please write a description'); return; }
+
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        journeyPosts.unshift({
+                            id: Date.now(),
+                            description: description,
+                            image: e.target.result,
+                            time: new Date().toLocaleString()
+                        });
+                        saveJourney();
+                        renderJourney();
+                        showNotification('✅ Journey post published!');
+                        journeyForm.classList.remove('active');
+                        document.getElementById('adminShowJourneyForm').textContent = 'Add Post';
+                        document.getElementById('journeyDescInput').value = '';
+                        document.getElementById('journeyImageInput').value = '';
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    journeyPosts.unshift({
+                        id: Date.now(),
+                        description: description,
+                        image: null,
+                        time: new Date().toLocaleString()
+                    });
+                    saveJourney();
+                    renderJourney();
+                    showNotification('✅ Journey post published!');
+                    journeyForm.classList.remove('active');
+                    document.getElementById('adminShowJourneyForm').textContent = 'Add Post';
+                    document.getElementById('journeyDescInput').value = '';
+                }
+            });
+
+            document.getElementById('adminDeleteAllJourney').addEventListener('click', function() {
+                if (!adminUnlocked) { showNotification('🔒 Admin locked'); return; }
+                if (confirm('⚠️ Delete ALL journey posts?')) {
+                    journeyPosts = [];
+                    saveJourney();
+                    renderJourney();
+                    showNotification('All journey posts deleted');
+                }
+            });
+
+            // ==========================================
+            // COMMUNITY
+            // ==========================================
+            let communityPosts = [];
+            const communityPostsEl = document.getElementById('communityPosts');
+
+            function renderCommunity() {
+                if (communityPosts.length === 0) {
+                    communityPostsEl.innerHTML =
+                        `<div style="text-align:center; padding:20px; opacity:0.2; font-size:14px;">No posts yet. Be the first to share!</div>`;
+                    return;
+                }
+                communityPostsEl.innerHTML = communityPosts.map((post, index) => `
+                        <div class="community-post-item">
+                            <div class="post-header">
+                                <div class="post-avatar">${post.author.charAt(0).toUpperCase()}</div>
+                                <span class="post-author">${post.author}</span>
+                                <span class="post-time">${post.time}</span>
+                            </div>
+                            <div class="post-text">${post.content}</div>
+                            ${adminUnlocked ? `<div class="post-delete"><button class="delete-community-post" data-index="${index}"><i class="far fa-trash-alt"></i> Delete</button></div>` : ''}
+                        </div>
+                    `).join('');
+
+                document.querySelectorAll('.delete-community-post').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const idx = parseInt(this.dataset.index);
+                        if (confirm('Delete this post?')) {
+                            communityPosts.splice(idx, 1);
+                            saveCommunity();
+                            renderCommunity();
+                            showNotification('Post deleted');
+                        }
+                    });
+                });
+            }
+
+            function saveCommunity() {
+                localStorage.setItem('efi_community', JSON.stringify(communityPosts));
+            }
+
+            function loadCommunity() {
+                const saved = localStorage.getItem('efi_community');
+                if (saved) {
+                    try { communityPosts = JSON.parse(saved); } catch (e) { communityPosts = []; }
+                }
+                renderCommunity();
+            }
+            loadCommunity();
+
+            document.getElementById('communityPostBtn').addEventListener('click', function() {
+                const input = document.getElementById('communityInput');
+                const content = input.value.trim();
+                if (!content) { showNotification('Write something'); return; }
+
+                const nameInput = document.getElementById('communityUserName');
+                const author = nameInput.value.trim() || 'Trader';
+
+                communityPosts.unshift({
+                    id: Date.now(),
+                    author: author,
+                    content: content,
+                    time: new Date().toLocaleString()
+                });
+                saveCommunity();
+                input.value = '';
+                renderCommunity();
+                showNotification('Post published!');
+            });
+
+            document.getElementById('communityInput').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    document.getElementById('communityPostBtn').click();
+                }
+            });
+
+            // ==========================================
+            // SIGNALS
+            // ==========================================
+            document.getElementById('signalWhatsappBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                showNotification('📱 WhatsApp: 0336-3811338');
+            });
+
+            document.getElementById('signalDmBtn').addEventListener('click', function() {
+                showNotification('📩 DM us on WhatsApp: 0336-3811338');
+            });
+
+            // ==========================================
+            // NOTIFICATION
+            // ==========================================
+            function showNotification(message) {
+                const existing = document.querySelector('.toast-notification');
+                if (existing) existing.remove();
+
+                const toast = document.createElement('div');
+                toast.className = 'toast-notification';
+                toast.textContent = message;
+                document.body.appendChild(toast);
+
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    toast.style.transform = 'translateX(-50%) translateY(20px)';
+                    toast.style.transition = 'all 0.4s ease';
+                    setTimeout(() => toast.remove(), 500);
+                }, 3000);
+            }
+
+            // ==========================================
+            // INIT
+            // ==========================================
+            console.log('🚀 EFI Trader · Premium Platform');
+            console.log('📚 Books: Separate cards with Name, Description, PDF Download');
+            console.log('📊 Trading Journey: Social feed style (Instagram/Facebook like)');
+            console.log('🔐 Admin: tap logo 3x · Password: efi2024');
+
+            setTimeout(() => {
+                showNotification('✨ Welcome to EFI Trader — Trade with Knowledge, Not Emotions');
+            }, 800);
+
+        })();
     </script>
 </body>
 </html>
