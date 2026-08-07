@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     
     <style>
+        /* ===== COMPLETE STYLES (SAME AS BEFORE) ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         :root {
@@ -418,7 +419,6 @@
             border: 1px solid rgba(201,168,76,0.06);
         }
 
-        /* ===== CHAPTER VIEW (BOOK READER) ===== */
         .chapter-view {
             background: rgba(26,26,46,0.3);
             backdrop-filter: blur(10px);
@@ -489,7 +489,6 @@
             border: 1px solid rgba(201,168,76,0.04);
         }
 
-        /* ===== CHAPTER DETAIL VIEW ===== */
         .chapter-detail-view {
             background: rgba(26,26,46,0.3);
             backdrop-filter: blur(10px);
@@ -636,8 +635,17 @@
             opacity: 1;
             color: var(--gold);
         }
-        .journey-card .post-actions .delete-btn:hover {
+        .journey-card .post-actions .delete-btn {
+            background: transparent;
+            border: none;
             color: #ff6b6b;
+            cursor: pointer;
+            font-size: 13px;
+            transition: var(--transition);
+            opacity: 0.5;
+        }
+        .journey-card .post-actions .delete-btn:hover {
+            opacity: 1;
         }
 
         .admin-panel {
@@ -1125,10 +1133,8 @@
             </div>
             <p style="opacity:0.4; font-size:14px; margin-bottom:16px;">Explore our library of trading knowledge</p>
 
-            <!-- Books Grid -->
             <div class="books-grid" id="booksGrid"></div>
 
-            <!-- Chapter View (Book Reader) -->
             <div class="chapter-view" id="chapterView">
                 <div class="book-header">
                     <button class="btn-back" onclick="closeChapterView()"><i class="fas fa-arrow-left"></i> Back to Books</button>
@@ -1138,7 +1144,6 @@
                 <div class="chapter-list" id="chapterList"></div>
             </div>
 
-            <!-- Chapter Detail View -->
             <div class="chapter-detail-view" id="chapterDetailView">
                 <div class="detail-header">
                     <button class="btn-back" onclick="closeChapterDetail()"><i class="fas fa-arrow-left"></i> Back to Chapters</button>
@@ -1148,7 +1153,6 @@
                 <div class="detail-body" id="detailChapterBody"></div>
             </div>
 
-            <!-- Admin Panel -->
             <div class="admin-panel" id="adminPanel">
                 <h3><i class="fas fa-lock text-gold"></i> Admin Panel</h3>
                 <p class="admin-sub">Manage Books · Trading Journey · Social Media</p>
@@ -1471,7 +1475,7 @@
             });
 
             // ==========================================
-            // DEFAULT BUILT-IN BOOK (21 Chapters, NO PDF)
+            // DEFAULT BUILT-IN BOOK
             // ==========================================
             const defaultBook = {
                 id: 'default_1',
@@ -1545,7 +1549,7 @@
                 ]
             };
 
-            let pdfBooks = []; // Only admin uploaded PDF books
+            let pdfBooks = [];
 
             const booksGrid = document.getElementById('booksGrid');
 
@@ -1565,7 +1569,7 @@
                 booksGrid.innerHTML = allBooks.map((book, index) => {
                     const isDefault = book.isDefault === true;
                     return `
-                            <div class="book-card ${adminUnlocked ? '' : 'admin-hidden'}">
+                            <div class="book-card">
                                 ${isDefault ? '<div class="book-badge"><i class="fas fa-star"></i> Built-in</div>' : ''}
                                 <div class="book-icon"><i class="fas ${isDefault ? 'fa-book-open' : 'fa-file-pdf'}"></i></div>
                                 <div class="book-title">${book.title}</div>
@@ -1579,13 +1583,12 @@
                                         `<button class="open-btn" onclick="openDefaultBook()"><i class="fas fa-book-reader"></i> Read Book</button>` :
                                         (book.pdfData ? `<a href="${book.pdfData}" target="_blank" class="pdf-btn"><i class="fas fa-download"></i> Download PDF</a>` : '<span style="opacity:0.2; font-size:13px;">No PDF</span>')
                                     }
-                                    ${!isDefault && adminUnlocked ? `<button class="delete-btn" data-index="${index - 1}"><i class="fas fa-trash"></i></button>` : ''}
+                                    ${!isDefault ? `<button class="delete-btn" data-index="${index - 1}"><i class="fas fa-trash"></i></button>` : ''}
                                 </div>
                             </div>
                         `;
                 }).join('');
 
-                // Delete only for PDF books
                 document.querySelectorAll('.delete-btn').forEach(btn => {
                     btn.addEventListener('click', function() {
                         if (!adminUnlocked) { showNotification('🔒 Admin locked'); return; }
@@ -1600,26 +1603,19 @@
                 });
             }
 
-            // ==========================================
-            // OPEN DEFAULT BOOK (In-App Reader)
-            // ==========================================
             window.openDefaultBook = function() {
                 const view = document.getElementById('chapterView');
                 const grid = document.querySelector('.books-grid');
                 const header = document.querySelector('.page-header');
 
-                // Hide grid and header
                 grid.style.display = 'none';
                 header.style.display = 'none';
 
-                // Show chapter view
                 view.classList.add('active');
 
-                // Set book info
                 document.getElementById('chapterBookTitle').textContent = defaultBook.title;
                 document.getElementById('chapterBookDesc').textContent = defaultBook.description;
 
-                // Render chapters
                 const list = document.getElementById('chapterList');
                 list.innerHTML = defaultBook.chapters.map((ch, idx) => `
                         <div class="chapter-item" onclick="openChapterDetail(${idx})">
@@ -1630,7 +1626,6 @@
                         </div>
                     `).join('');
 
-                // Close admin panel if open
                 adminPanel.classList.remove('active');
 
                 window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1648,9 +1643,6 @@
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             };
 
-            // ==========================================
-            // OPEN CHAPTER DETAIL
-            // ==========================================
             window.openChapterDetail = function(index) {
                 const ch = defaultBook.chapters[index];
                 if (!ch) return;
@@ -1658,7 +1650,6 @@
                 const detailView = document.getElementById('chapterDetailView');
                 const chapterView = document.getElementById('chapterView');
 
-                // Hide chapter list, show detail
                 chapterView.querySelector('.chapter-list').style.display = 'none';
                 detailView.classList.add('active');
 
@@ -1693,9 +1684,6 @@
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             };
 
-            // ==========================================
-            // PDF BOOKS (Admin Uploaded)
-            // ==========================================
             function savePDFBooks() {
                 localStorage.setItem('efi_pdf_books', JSON.stringify(pdfBooks));
             }
@@ -1709,9 +1697,6 @@
             }
             loadPDFBooks();
 
-            // ==========================================
-            // ADMIN: ADD PDF BOOK
-            // ==========================================
             const bookForm = document.getElementById('adminBookForm');
             document.getElementById('adminShowBookForm').addEventListener('click', function() {
                 if (!adminUnlocked) { showNotification('🔒 Admin locked'); return; }
@@ -1789,7 +1774,7 @@
                 }
 
                 journeyFeed.innerHTML = journeyPosts.map((post, index) => `
-                        <div class="journey-card ${adminUnlocked ? '' : 'admin-hidden'}">
+                        <div class="journey-card">
                             <div class="post-header">
                                 <div class="post-avatar">A</div>
                                 <div>
@@ -1802,7 +1787,7 @@
                             <div class="post-actions">
                                 <button><i class="far fa-heart"></i> Like</button>
                                 <button><i class="far fa-comment"></i> Comment</button>
-                                ${adminUnlocked ? `<button class="delete-btn" data-index="${index}"><i class="fas fa-trash"></i> Delete</button>` : ''}
+                                <button class="delete-btn" data-index="${index}"><i class="fas fa-trash"></i> Delete</button>
                             </div>
                         </div>
                     `).join('');
@@ -1913,6 +1898,7 @@
                         `<div style="text-align:center; padding:20px; opacity:0.2; font-size:14px;">No posts yet. Be the first to share!</div>`;
                     return;
                 }
+
                 communityPostsEl.innerHTML = communityPosts.map((post, index) => `
                         <div class="community-post-item">
                             <div class="post-header">
@@ -1921,12 +1907,15 @@
                                 <span class="post-time">${post.time}</span>
                             </div>
                             <div class="post-text">${post.content}</div>
-                            ${adminUnlocked ? `<div class="post-delete"><button class="delete-community-post" data-index="${index}"><i class="far fa-trash-alt"></i> Delete</button></div>` : ''}
+                            <div class="post-delete">
+                                <button class="delete-community-post" data-index="${index}"><i class="far fa-trash-alt"></i> Delete</button>
+                            </div>
                         </div>
                     `).join('');
 
                 document.querySelectorAll('.delete-community-post').forEach(btn => {
                     btn.addEventListener('click', function() {
+                        if (!adminUnlocked) { showNotification('🔒 Admin locked'); return; }
                         const idx = parseInt(this.dataset.index);
                         if (confirm('Delete this post?')) {
                             communityPosts.splice(idx, 1);
@@ -2010,9 +1999,6 @@
                 }, 3000);
             }
 
-            // ==========================================
-            // INIT
-            // ==========================================
             console.log('🚀 EFI Trader · Premium Platform');
             console.log('📚 Default built-in book with 21 chapters');
             console.log('📄 PDF books: Admin upload');
