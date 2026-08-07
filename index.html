@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     
     <style>
-        /* ===== ALL STYLES ===== */
+        /* ===== ALL STYLES (SAME AS BEFORE) ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         :root {
@@ -301,9 +301,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* ============================================================
-           BOOKS
-           ============================================================ */
         .books-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -547,9 +544,6 @@
             margin-top: 4px;
         }
 
-        /* ============================================================
-           TRADING JOURNEY - SOCIAL FEED
-           ============================================================ */
         .journey-feed {
             display: flex;
             flex-direction: column;
@@ -654,9 +648,6 @@
             opacity: 1;
         }
 
-        /* ============================================================
-           ADMIN PANEL
-           ============================================================ */
         .admin-panel {
             display: none;
             background: rgba(26,26,46,0.3);
@@ -790,9 +781,6 @@
         .admin-password-input .admin-unlock:hover { background: var(--gold); color: var(--navy); }
         .admin-password-input .admin-status { font-size: 13px; opacity: 0.3; }
 
-        /* ============================================================
-           SOCIAL
-           ============================================================ */
         .social-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -820,9 +808,6 @@
         .social-card .name { font-size: 14px; font-weight: 500; }
         .social-card .handle { font-size: 12px; opacity: 0.3; margin-top: 4px; }
 
-        /* ============================================================
-           SIGNAL
-           ============================================================ */
         .signal-box {
             background: rgba(26,26,46,0.25);
             backdrop-filter: blur(10px);
@@ -841,9 +826,6 @@
         .signal-box .message { font-size: 16px; opacity: 0.6; line-height: 1.8; max-width: 500px; margin: 0 auto 20px; }
         .signal-box .contact { font-size: 14px; opacity: 0.4; margin-top: 12px; }
 
-        /* ============================================================
-           COMMUNITY
-           ============================================================ */
         .community-box {
             background: rgba(26,26,46,0.25);
             backdrop-filter: blur(10px);
@@ -1790,7 +1772,7 @@
             });
 
             // ============================================================
-            // TRADING JOURNEY - FIXED: Posts visible to everyone
+            // TRADING JOURNEY - FIXED: Force render
             // ============================================================
             let journeyPosts = [];
             const journeyFeed = document.getElementById('journeyFeed');
@@ -1855,7 +1837,7 @@
                         journeyPosts = []; 
                     }
                 } else {
-                    // Add sample post for testing
+                    // Add sample post if empty
                     journeyPosts = [{
                         id: Date.now(),
                         description: 'Welcome to Trading Journey! Start posting your trades here.',
@@ -1866,7 +1848,6 @@
                 }
                 renderJourney();
             }
-            loadJourney();
 
             const journeyForm = document.getElementById('adminJourneyForm');
             document.getElementById('adminShowJourneyForm').addEventListener('click', function() {
@@ -1936,7 +1917,7 @@
             });
 
             // ============================================================
-            // COMMUNITY - FIXED: Posts visible to everyone
+            // COMMUNITY - FIXED: Force render
             // ============================================================
             let communityPosts = [];
             const communityPostsEl = document.getElementById('communityPosts');
@@ -2000,7 +1981,6 @@
                 }
                 renderCommunity();
             }
-            loadCommunity();
 
             document.getElementById('communityPostBtn').addEventListener('click', function() {
                 const input = document.getElementById('communityInput');
@@ -2069,11 +2049,22 @@
             console.log('📄 PDF books: Admin upload');
             console.log('🔐 Admin: tap logo 3x · Password: efi2024');
 
-            // Force render on page load
-            setTimeout(() => {
-                renderJourney();
-                renderCommunity();
-            }, 100);
+            // Load data on page load
+            loadJourney();
+            loadCommunity();
+
+            // Force render when tab is clicked
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const target = this.dataset.tab;
+                    if (target === 'journey') {
+                        setTimeout(renderJourney, 100);
+                    }
+                    if (target === 'community') {
+                        setTimeout(renderCommunity, 100);
+                    }
+                });
+            });
 
             setTimeout(() => {
                 showNotification('✨ Welcome to EFI Trader — Trade with Knowledge, Not Emotions');
