@@ -12,9 +12,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     
     <style>
-        /* ===== ALL STYLES (SAME AS BEFORE) ===== */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
+        * { margin:0; padding:0; box-sizing:border-box; }
         :root {
             --navy: #0A1628;
             --cream: #F8F6F0;
@@ -29,9 +27,7 @@
             --radius-sm: 16px;
             --transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
         }
-
         html { scroll-behavior: smooth; }
-        
         body {
             font-family: 'Inter', sans-serif;
             background: var(--navy);
@@ -40,17 +36,14 @@
             line-height: 1.6;
             overflow-x: hidden;
         }
-
         body.light {
             background: var(--cream);
             color: var(--text-dark);
         }
-
         body.light .nav-blur {
             background: rgba(248,246,240,0.92);
             border-bottom: 1px solid rgba(201,168,76,0.12);
         }
-
         body.light .book-card,
         body.light .journey-card,
         body.light .community-box,
@@ -64,16 +57,13 @@
             background: rgba(255,255,255,0.7);
             border: 1px solid rgba(201,168,76,0.1);
         }
-
         body.light .section-alt { background: rgba(201,168,76,0.04); }
         body.light .footer { border-top: 1px solid rgba(201,168,76,0.1); }
         body.light .footer-link { color: var(--text-dark); }
         body.light .btn-secondary { color: var(--text-dark); border-color: rgba(201,168,76,0.2); }
         body.light .btn-secondary:hover { color: var(--gold); border-color: var(--gold); }
-
         .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
         .text-gold { color: var(--gold); }
-
         .btn-primary {
             display: inline-flex;
             align-items: center;
@@ -91,7 +81,6 @@
             text-decoration: none;
         }
         .btn-primary:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 12px 40px rgba(201,168,76,0.35); }
-
         .btn-secondary {
             display: inline-flex;
             align-items: center;
@@ -108,7 +97,6 @@
             text-decoration: none;
         }
         .btn-secondary:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); background: rgba(201,168,76,0.05); }
-
         .btn-whatsapp {
             display: inline-flex;
             align-items: center;
@@ -125,7 +113,6 @@
             text-decoration: none;
         }
         .btn-whatsapp:hover { transform: scale(1.04); box-shadow: 0 8px 30px rgba(37,211,102,0.3); }
-
         .btn-back {
             display: inline-flex;
             align-items: center;
@@ -140,7 +127,6 @@
             border-radius: 8px;
         }
         .btn-back:hover { background: rgba(201,168,76,0.08); }
-
         .nav-blur {
             position: fixed;
             top: 0;
@@ -196,7 +182,6 @@
             letter-spacing: 0.5px;
         }
         .lang-btn:hover { background: rgba(201,168,76,0.2); transform: scale(1.05); }
-
         .hero {
             min-height: 60vh;
             display: flex;
@@ -276,7 +261,6 @@
             color: var(--gold);
         }
         .stat-item .label { font-size: 13px; opacity: 0.4; }
-
         .page-container {
             display: none;
             padding: 100px 0 60px;
@@ -295,19 +279,16 @@
             font-family: 'Playfair Display', serif;
             font-size: 30px;
         }
-
         @keyframes fadeUp {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
         .books-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 24px;
             margin-top: 16px;
         }
-
         .book-card {
             background: rgba(26,26,46,0.25);
             backdrop-filter: blur(10px);
@@ -418,7 +399,6 @@
             margin-bottom: 8px;
             border: 1px solid rgba(201,168,76,0.06);
         }
-
         .chapter-view {
             background: rgba(26,26,46,0.3);
             backdrop-filter: blur(10px);
@@ -488,7 +468,6 @@
             border-radius: 8px;
             border: 1px solid rgba(201,168,76,0.04);
         }
-
         .chapter-detail-view {
             background: rgba(26,26,46,0.3);
             backdrop-filter: blur(10px);
@@ -543,14 +522,12 @@
             font-size: 14px;
             margin-top: 4px;
         }
-
         .journey-feed {
             display: flex;
             flex-direction: column;
             gap: 24px;
             margin-top: 16px;
         }
-
         .journey-card {
             background: rgba(26,26,46,0.25);
             backdrop-filter: blur(10px);
@@ -647,7 +624,6 @@
         .journey-card .post-actions .delete-btn:hover {
             opacity: 1;
         }
-
         .admin-panel {
             display: none;
             background: rgba(26,26,46,0.3);
@@ -685,7 +661,6 @@
         }
         .admin-panel .admin-btn:hover { background: rgba(201,168,76,0.08); border-color: var(--gold); color: var(--gold); }
         .admin-panel .admin-btn.danger:hover { background: rgba(255,107,107,0.08); border-color: #ff6b6b; color: #ff6b6b; }
-
         .admin-panel .admin-form {
             background: rgba(26,26,46,0.2);
             border: 1px solid rgba(201,168,76,0.06);
@@ -747,7 +722,6 @@
             flex-wrap: wrap;
             margin-top: 4px;
         }
-
         .admin-password-input {
             margin-top: 16px;
             display: flex;
@@ -780,7 +754,6 @@
         }
         .admin-password-input .admin-unlock:hover { background: var(--gold); color: var(--navy); }
         .admin-password-input .admin-status { font-size: 13px; opacity: 0.3; }
-
         .social-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -807,7 +780,6 @@
         .social-card .icon { font-size: 36px; margin-bottom: 8px; display: block; }
         .social-card .name { font-size: 14px; font-weight: 500; }
         .social-card .handle { font-size: 12px; opacity: 0.3; margin-top: 4px; }
-
         .signal-box {
             background: rgba(26,26,46,0.25);
             backdrop-filter: blur(10px);
@@ -825,7 +797,6 @@
         .signal-box .accuracy { font-size: 18px; color: var(--gold); font-weight: 600; margin-bottom: 12px; }
         .signal-box .message { font-size: 16px; opacity: 0.6; line-height: 1.8; max-width: 500px; margin: 0 auto 20px; }
         .signal-box .contact { font-size: 14px; opacity: 0.4; margin-top: 12px; }
-
         .community-box {
             background: rgba(26,26,46,0.25);
             backdrop-filter: blur(10px);
@@ -916,7 +887,6 @@
             transition: var(--transition);
         }
         .community-post-item .post-delete button:hover { opacity: 1; }
-
         .admin-social-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -957,7 +927,6 @@
         }
         .admin-social-card .s-actions button:hover { opacity: 1; background: rgba(201,168,76,0.06); }
         .admin-social-card .s-actions .del-social:hover { color: #ff6b6b; background: rgba(255,107,107,0.08); }
-
         .footer {
             border-top: 1px solid rgba(201,168,76,0.04);
             padding: 32px 0;
@@ -986,7 +955,6 @@
         }
         .footer-link:hover { opacity: 1; color: var(--gold); }
         .footer-copy { font-size: 12px; opacity: 0.15; }
-
         .categories-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -1011,7 +979,6 @@
         .category-card .icon { font-size: 40px; color: var(--gold); margin-bottom: 12px; display: block; }
         .category-card h3 { font-family: 'Playfair Display', serif; font-size: 20px; margin-bottom: 4px; }
         .category-card p { opacity: 0.4; font-size: 13px; }
-
         .toast-notification {
             position: fixed;
             bottom: 30px;
@@ -1036,7 +1003,6 @@
             color: #1A1A2E;
             border: 1px solid rgba(201,168,76,0.15);
         }
-
         @media (max-width: 768px) {
             .hero-title { font-size: 32px; }
             .hero { padding: 100px 0 30px; min-height: auto; }
@@ -1772,7 +1738,7 @@
             });
 
             // ============================================================
-            // TRADING JOURNEY - FIXED: Force render
+            // TRADING JOURNEY - FIXED
             // ============================================================
             let journeyPosts = [];
             const journeyFeed = document.getElementById('journeyFeed');
@@ -1837,13 +1803,7 @@
                         journeyPosts = []; 
                     }
                 } else {
-                    // Add sample post if empty
-                    journeyPosts = [{
-                        id: Date.now(),
-                        description: 'Welcome to Trading Journey! Start posting your trades here.',
-                        image: null,
-                        time: new Date().toLocaleString()
-                    }];
+                    journeyPosts = [];
                     saveJourney();
                 }
                 renderJourney();
@@ -1917,7 +1877,7 @@
             });
 
             // ============================================================
-            // COMMUNITY - FIXED: Force render
+            // COMMUNITY - FIXED
             // ============================================================
             let communityPosts = [];
             const communityPostsEl = document.getElementById('communityPosts');
@@ -1971,12 +1931,7 @@
                         communityPosts = []; 
                     }
                 } else {
-                    communityPosts = [{
-                        id: Date.now(),
-                        author: 'Trader',
-                        content: 'Welcome to the Community! Share your trading ideas here.',
-                        time: new Date().toLocaleString()
-                    }];
+                    communityPosts = [];
                     saveCommunity();
                 }
                 renderCommunity();
@@ -2049,19 +2004,23 @@
             console.log('📄 PDF books: Admin upload');
             console.log('🔐 Admin: tap logo 3x · Password: efi2024');
 
-            // Load data on page load
+            // Load everything
             loadJourney();
             loadCommunity();
+            loadPDFBooks();
 
-            // Force render when tab is clicked
+            // Force render on tab switch
             document.querySelectorAll('.nav-tab').forEach(tab => {
                 tab.addEventListener('click', function() {
                     const target = this.dataset.tab;
                     if (target === 'journey') {
-                        setTimeout(renderJourney, 100);
+                        setTimeout(loadJourney, 100);
                     }
                     if (target === 'community') {
-                        setTimeout(renderCommunity, 100);
+                        setTimeout(loadCommunity, 100);
+                    }
+                    if (target === 'books') {
+                        setTimeout(loadPDFBooks, 100);
                     }
                 });
             });
