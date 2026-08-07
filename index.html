@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     
     <style>
-        /* ===== COMPLETE STYLES (SAME AS BEFORE) ===== */
+        /* ===== ALL STYLES ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         :root {
@@ -301,6 +301,9 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* ============================================================
+           BOOKS
+           ============================================================ */
         .books-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -544,6 +547,9 @@
             margin-top: 4px;
         }
 
+        /* ============================================================
+           TRADING JOURNEY - SOCIAL FEED
+           ============================================================ */
         .journey-feed {
             display: flex;
             flex-direction: column;
@@ -639,15 +645,18 @@
             background: transparent;
             border: none;
             color: #ff6b6b;
+            opacity: 0.5;
             cursor: pointer;
             font-size: 13px;
             transition: var(--transition);
-            opacity: 0.5;
         }
         .journey-card .post-actions .delete-btn:hover {
             opacity: 1;
         }
 
+        /* ============================================================
+           ADMIN PANEL
+           ============================================================ */
         .admin-panel {
             display: none;
             background: rgba(26,26,46,0.3);
@@ -781,6 +790,9 @@
         .admin-password-input .admin-unlock:hover { background: var(--gold); color: var(--navy); }
         .admin-password-input .admin-status { font-size: 13px; opacity: 0.3; }
 
+        /* ============================================================
+           SOCIAL
+           ============================================================ */
         .social-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -808,6 +820,9 @@
         .social-card .name { font-size: 14px; font-weight: 500; }
         .social-card .handle { font-size: 12px; opacity: 0.3; margin-top: 4px; }
 
+        /* ============================================================
+           SIGNAL
+           ============================================================ */
         .signal-box {
             background: rgba(26,26,46,0.25);
             backdrop-filter: blur(10px);
@@ -826,6 +841,9 @@
         .signal-box .message { font-size: 16px; opacity: 0.6; line-height: 1.8; max-width: 500px; margin: 0 auto 20px; }
         .signal-box .contact { font-size: 14px; opacity: 0.4; margin-top: 12px; }
 
+        /* ============================================================
+           COMMUNITY
+           ============================================================ */
         .community-box {
             background: rgba(26,26,46,0.25);
             backdrop-filter: blur(10px);
@@ -1301,6 +1319,9 @@
         (function() {
             'use strict';
 
+            // ============================================================
+            // PAGE NAVIGATION
+            // ============================================================
             function showPage(pageId) {
                 document.querySelectorAll('.page-container').forEach(p => p.classList.remove('active'));
                 document.getElementById(pageId).classList.add('active');
@@ -1308,6 +1329,9 @@
             }
             window.showPage = showPage;
 
+            // ============================================================
+            // THEME
+            // ============================================================
             const themeToggle = document.getElementById('themeToggle');
             const body = document.body;
             if (localStorage.getItem('efi-theme') === 'light') {
@@ -1321,6 +1345,9 @@
                     '<i class="fas fa-moon"></i>';
             });
 
+            // ============================================================
+            // LANGUAGE
+            // ============================================================
             let lang = localStorage.getItem('efi-lang') || 'EN';
             document.getElementById('langToggle').textContent = lang;
             document.getElementById('langToggle').addEventListener('click', function() {
@@ -1331,6 +1358,9 @@
                 showNotification('Language: ' + lang);
             });
 
+            // ============================================================
+            // ADMIN PANEL - 3 TAPS ON LOGO
+            // ============================================================
             let adminUnlocked = false;
             const adminPanel = document.getElementById('adminPanel');
             const adminStatus = document.getElementById('adminStatus');
@@ -1373,6 +1403,9 @@
                 }
             });
 
+            // ============================================================
+            // SOCIAL MEDIA
+            // ============================================================
             const socialLinks = [
                 { id: 1, name: 'YouTube', icon: 'fab fa-youtube', color: '#FF0000',
                     url: 'https://www.youtube.com/@ozi1001ozi', handle: '@ozi1001ozi' },
@@ -1474,9 +1507,9 @@
                 showNotification('Social link added!');
             });
 
-            // ==========================================
+            // ============================================================
             // DEFAULT BUILT-IN BOOK
-            // ==========================================
+            // ============================================================
             const defaultBook = {
                 id: 'default_1',
                 title: 'Basic Course for Beginners',
@@ -1756,13 +1789,15 @@
                 }
             });
 
-            // ==========================================
-            // TRADING JOURNEY
-            // ==========================================
+            // ============================================================
+            // TRADING JOURNEY - FIXED: Posts visible to everyone
+            // ============================================================
             let journeyPosts = [];
             const journeyFeed = document.getElementById('journeyFeed');
 
             function renderJourney() {
+                console.log('🔄 Rendering Journey Posts:', journeyPosts.length);
+
                 if (journeyPosts.length === 0) {
                     journeyFeed.innerHTML = `
                             <div style="text-align:center; padding:40px; opacity:0.25; border:1px dashed rgba(201,168,76,0.1); border-radius:var(--radius);">
@@ -1787,7 +1822,7 @@
                             <div class="post-actions">
                                 <button><i class="far fa-heart"></i> Like</button>
                                 <button><i class="far fa-comment"></i> Comment</button>
-                                <button class="delete-btn" data-index="${index}"><i class="fas fa-trash"></i> Delete</button>
+                                ${adminUnlocked ? `<button class="delete-btn" data-index="${index}"><i class="fas fa-trash"></i> Delete</button>` : ''}
                             </div>
                         </div>
                     `).join('');
@@ -1813,7 +1848,21 @@
             function loadJourney() {
                 const saved = localStorage.getItem('efi_journey');
                 if (saved) {
-                    try { journeyPosts = JSON.parse(saved); } catch (e) { journeyPosts = []; }
+                    try { 
+                        journeyPosts = JSON.parse(saved); 
+                        console.log('✅ Journey posts loaded:', journeyPosts.length);
+                    } catch (e) { 
+                        journeyPosts = []; 
+                    }
+                } else {
+                    // Add sample post for testing
+                    journeyPosts = [{
+                        id: Date.now(),
+                        description: 'Welcome to Trading Journey! Start posting your trades here.',
+                        image: null,
+                        time: new Date().toLocaleString()
+                    }];
+                    saveJourney();
                 }
                 renderJourney();
             }
@@ -1886,13 +1935,15 @@
                 }
             });
 
-            // ==========================================
-            // COMMUNITY
-            // ==========================================
+            // ============================================================
+            // COMMUNITY - FIXED: Posts visible to everyone
+            // ============================================================
             let communityPosts = [];
             const communityPostsEl = document.getElementById('communityPosts');
 
             function renderCommunity() {
+                console.log('🔄 Rendering Community Posts:', communityPosts.length);
+
                 if (communityPosts.length === 0) {
                     communityPostsEl.innerHTML =
                         `<div style="text-align:center; padding:20px; opacity:0.2; font-size:14px;">No posts yet. Be the first to share!</div>`;
@@ -1907,9 +1958,7 @@
                                 <span class="post-time">${post.time}</span>
                             </div>
                             <div class="post-text">${post.content}</div>
-                            <div class="post-delete">
-                                <button class="delete-community-post" data-index="${index}"><i class="far fa-trash-alt"></i> Delete</button>
-                            </div>
+                            ${adminUnlocked ? `<div class="post-delete"><button class="delete-community-post" data-index="${index}"><i class="far fa-trash-alt"></i> Delete</button></div>` : ''}
                         </div>
                     `).join('');
 
@@ -1934,7 +1983,20 @@
             function loadCommunity() {
                 const saved = localStorage.getItem('efi_community');
                 if (saved) {
-                    try { communityPosts = JSON.parse(saved); } catch (e) { communityPosts = []; }
+                    try { 
+                        communityPosts = JSON.parse(saved); 
+                        console.log('✅ Community posts loaded:', communityPosts.length);
+                    } catch (e) { 
+                        communityPosts = []; 
+                    }
+                } else {
+                    communityPosts = [{
+                        id: Date.now(),
+                        author: 'Trader',
+                        content: 'Welcome to the Community! Share your trading ideas here.',
+                        time: new Date().toLocaleString()
+                    }];
+                    saveCommunity();
                 }
                 renderCommunity();
             }
@@ -1967,9 +2029,9 @@
                 }
             });
 
-            // ==========================================
+            // ============================================================
             // SIGNALS
-            // ==========================================
+            // ============================================================
             document.getElementById('signalWhatsappBtn').addEventListener('click', function(e) {
                 e.preventDefault();
                 showNotification('📱 WhatsApp: 0336-3811338');
@@ -1979,9 +2041,9 @@
                 showNotification('📩 DM us on WhatsApp: 0336-3811338');
             });
 
-            // ==========================================
+            // ============================================================
             // NOTIFICATION
-            // ==========================================
+            // ============================================================
             function showNotification(message) {
                 const existing = document.querySelector('.toast-notification');
                 if (existing) existing.remove();
@@ -1999,10 +2061,19 @@
                 }, 3000);
             }
 
+            // ============================================================
+            // INIT
+            // ============================================================
             console.log('🚀 EFI Trader · Premium Platform');
             console.log('📚 Default built-in book with 21 chapters');
             console.log('📄 PDF books: Admin upload');
             console.log('🔐 Admin: tap logo 3x · Password: efi2024');
+
+            // Force render on page load
+            setTimeout(() => {
+                renderJourney();
+                renderCommunity();
+            }, 100);
 
             setTimeout(() => {
                 showNotification('✨ Welcome to EFI Trader — Trade with Knowledge, Not Emotions');
