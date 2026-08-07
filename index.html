@@ -58,7 +58,8 @@
         body.light .signal-box,
         body.light .journey-form,
         body.light .category-card,
-        body.light .chart-card {
+        body.light .chart-card,
+        body.light .chapter-view {
             background: rgba(255,255,255,0.7);
             border: 1px solid rgba(201,168,76,0.1);
         }
@@ -72,7 +73,6 @@
         .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
         .text-gold { color: var(--gold); }
 
-        /* ===== BUTTONS ===== */
         .btn-primary {
             display: inline-flex;
             align-items: center;
@@ -140,7 +140,6 @@
         }
         .btn-back:hover { background: rgba(201,168,76,0.08); }
 
-        /* ===== NAV ===== */
         .nav-blur {
             position: fixed;
             top: 0;
@@ -197,7 +196,6 @@
         }
         .lang-btn:hover { background: rgba(201,168,76,0.2); transform: scale(1.05); }
 
-        /* ===== HERO ===== */
         .hero {
             min-height: 60vh;
             display: flex;
@@ -221,10 +219,7 @@
             0% { transform: scale(1) translate(0,0); opacity: 0.3; }
             100% { transform: scale(1.3) translate(-60px,60px); opacity: 0.8; }
         }
-        .hero-grid {
-            position: relative;
-            z-index: 1;
-        }
+        .hero-grid { position: relative; z-index: 1; }
         .hero-badge {
             display: inline-flex;
             align-items: center;
@@ -281,9 +276,6 @@
         }
         .stat-item .label { font-size: 13px; opacity: 0.4; }
 
-        /* ==========================================
-           PAGE SYSTEM
-           ========================================== */
         .page-container {
             display: none;
             padding: 100px 0 60px;
@@ -308,9 +300,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* ==========================================
-           BOOKS - SEPARATE CARDS
-           ========================================== */
         .books-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -363,6 +352,25 @@
             align-items: center;
             margin-top: auto;
         }
+        .book-card .book-actions .open-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--gold);
+            color: var(--navy);
+            padding: 8px 20px;
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            border: none;
+        }
+        .book-card .book-actions .open-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 20px rgba(201,168,76,0.3);
+        }
         .book-card .book-actions .pdf-btn {
             display: inline-flex;
             align-items: center;
@@ -397,11 +405,146 @@
             opacity: 1;
             background: rgba(255,107,107,0.08);
         }
-        .book-card.admin-hidden .delete-btn { display: none; }
+        .book-card .book-badge {
+            display: inline-block;
+            background: rgba(201,168,76,0.08);
+            color: var(--gold);
+            font-size: 10px;
+            padding: 2px 12px;
+            border-radius: 100px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            border: 1px solid rgba(201,168,76,0.06);
+        }
 
-        /* ==========================================
-           TRADING JOURNEY - SOCIAL FEED STYLE
-           ========================================== */
+        /* ===== CHAPTER VIEW (BOOK READER) ===== */
+        .chapter-view {
+            background: rgba(26,26,46,0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(201,168,76,0.06);
+            border-radius: var(--radius);
+            padding: 32px;
+            margin-top: 16px;
+            display: none;
+        }
+        .chapter-view.active {
+            display: block;
+            animation: fadeUp 0.4s ease;
+        }
+        .chapter-view .book-header {
+            border-bottom: 1px solid rgba(201,168,76,0.06);
+            padding-bottom: 16px;
+            margin-bottom: 16px;
+        }
+        .chapter-view .book-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+        }
+        .chapter-view .book-header .sub {
+            opacity: 0.4;
+            font-size: 14px;
+        }
+        .chapter-view .chapter-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .chapter-view .chapter-item {
+            background: rgba(26,26,46,0.15);
+            border: 1px solid rgba(201,168,76,0.04);
+            border-radius: var(--radius-sm);
+            padding: 16px 20px;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        .chapter-view .chapter-item:hover {
+            border-color: rgba(201,168,76,0.12);
+            background: rgba(201,168,76,0.04);
+        }
+        .chapter-view .chapter-item .num {
+            color: var(--gold);
+            font-weight: 600;
+            font-size: 13px;
+            opacity: 0.5;
+        }
+        .chapter-view .chapter-item .title {
+            font-weight: 600;
+            font-size: 17px;
+        }
+        .chapter-view .chapter-item .desc {
+            opacity: 0.5;
+            font-size: 14px;
+            margin-top: 4px;
+            line-height: 1.6;
+        }
+        .chapter-view .chapter-item .example {
+            color: var(--gold);
+            font-size: 13px;
+            margin-top: 6px;
+            opacity: 0.6;
+            padding: 8px 14px;
+            background: rgba(201,168,76,0.04);
+            border-radius: 8px;
+            border: 1px solid rgba(201,168,76,0.04);
+        }
+
+        /* ===== CHAPTER DETAIL VIEW ===== */
+        .chapter-detail-view {
+            background: rgba(26,26,46,0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(201,168,76,0.06);
+            border-radius: var(--radius);
+            padding: 32px;
+            margin-top: 16px;
+            display: none;
+        }
+        .chapter-detail-view.active {
+            display: block;
+            animation: fadeUp 0.4s ease;
+        }
+        .chapter-detail-view .detail-header {
+            border-bottom: 1px solid rgba(201,168,76,0.06);
+            padding-bottom: 16px;
+            margin-bottom: 16px;
+        }
+        .chapter-detail-view .detail-header .num {
+            color: var(--gold);
+            font-size: 13px;
+            opacity: 0.5;
+        }
+        .chapter-detail-view .detail-header h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 26px;
+            margin-top: 4px;
+        }
+        .chapter-detail-view .detail-body {
+            line-height: 1.8;
+        }
+        .chapter-detail-view .detail-body .section {
+            margin-bottom: 16px;
+        }
+        .chapter-detail-view .detail-body .section .label {
+            font-weight: 600;
+            color: var(--gold);
+            font-size: 14px;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .chapter-detail-view .detail-body .section .value {
+            opacity: 0.7;
+            font-size: 15px;
+        }
+        .chapter-detail-view .detail-body .section .example-box {
+            background: rgba(201,168,76,0.04);
+            border: 1px solid rgba(201,168,76,0.06);
+            border-radius: 8px;
+            padding: 12px 16px;
+            color: var(--gold);
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
         .journey-feed {
             display: flex;
             flex-direction: column;
@@ -496,11 +639,7 @@
         .journey-card .post-actions .delete-btn:hover {
             color: #ff6b6b;
         }
-        .journey-card.admin-hidden .delete-btn { display: none; }
 
-        /* ==========================================
-           ADMIN PANEL
-           ========================================== */
         .admin-panel {
             display: none;
             background: rgba(26,26,46,0.3);
@@ -634,9 +773,6 @@
         .admin-password-input .admin-unlock:hover { background: var(--gold); color: var(--navy); }
         .admin-password-input .admin-status { font-size: 13px; opacity: 0.3; }
 
-        /* ==========================================
-           SOCIAL MEDIA
-           ========================================== */
         .social-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -664,9 +800,6 @@
         .social-card .name { font-size: 14px; font-weight: 500; }
         .social-card .handle { font-size: 12px; opacity: 0.3; margin-top: 4px; }
 
-        /* ==========================================
-           SIGNAL
-           ========================================== */
         .signal-box {
             background: rgba(26,26,46,0.25);
             backdrop-filter: blur(10px);
@@ -685,9 +818,6 @@
         .signal-box .message { font-size: 16px; opacity: 0.6; line-height: 1.8; max-width: 500px; margin: 0 auto 20px; }
         .signal-box .contact { font-size: 14px; opacity: 0.4; margin-top: 12px; }
 
-        /* ==========================================
-           COMMUNITY
-           ========================================== */
         .community-box {
             background: rgba(26,26,46,0.25);
             backdrop-filter: blur(10px);
@@ -779,9 +909,6 @@
         }
         .community-post-item .post-delete button:hover { opacity: 1; }
 
-        /* ==========================================
-           ADMIN SOCIAL
-           ========================================== */
         .admin-social-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -823,9 +950,6 @@
         .admin-social-card .s-actions button:hover { opacity: 1; background: rgba(201,168,76,0.06); }
         .admin-social-card .s-actions .del-social:hover { color: #ff6b6b; background: rgba(255,107,107,0.08); }
 
-        /* ==========================================
-           FOOTER
-           ========================================== */
         .footer {
             border-top: 1px solid rgba(201,168,76,0.04);
             padding: 32px 0;
@@ -855,9 +979,6 @@
         .footer-link:hover { opacity: 1; color: var(--gold); }
         .footer-copy { font-size: 12px; opacity: 0.15; }
 
-        /* ==========================================
-           CATEGORIES
-           ========================================== */
         .categories-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -883,9 +1004,6 @@
         .category-card h3 { font-family: 'Playfair Display', serif; font-size: 20px; margin-bottom: 4px; }
         .category-card p { opacity: 0.4; font-size: 13px; }
 
-        /* ==========================================
-           TOAST
-           ========================================== */
         .toast-notification {
             position: fixed;
             bottom: 30px;
@@ -911,9 +1029,6 @@
             border: 1px solid rgba(201,168,76,0.15);
         }
 
-        /* ==========================================
-           RESPONSIVE
-           ========================================== */
         @media (max-width: 768px) {
             .hero-title { font-size: 32px; }
             .hero { padding: 100px 0 30px; min-height: auto; }
@@ -925,6 +1040,8 @@
             .signal-box { padding: 24px 16px; }
             .signal-box .big-icon { font-size: 40px; }
             .signal-box h2 { font-size: 24px; }
+            .chapter-view .chapter-item .title { font-size: 15px; }
+            .chapter-detail-view .detail-header h3 { font-size: 22px; }
         }
         @media (max-width: 480px) {
             .hero-title { font-size: 26px; }
@@ -933,12 +1050,13 @@
             .admin-social-grid { grid-template-columns: 1fr; }
             .hero-stats { gap: 20px; flex-wrap: wrap; }
             .journey-card .post-image { max-height: 300px; }
+            .chapter-view .chapter-item { padding: 12px 16px; }
+            .chapter-detail-view { padding: 20px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- ===== NAVIGATION ===== -->
     <nav class="nav-blur">
         <div class="container nav-inner">
             <div class="logo" id="logoTrigger">EFI <span>Trader</span></div>
@@ -949,9 +1067,6 @@
         </div>
     </nav>
 
-    <!-- ==========================================
-    HOME PAGE
-    ========================================== -->
     <div id="homePage" class="page-container active">
         <section class="hero">
             <div class="container">
@@ -1002,20 +1117,38 @@
         </section>
     </div>
 
-    <!-- ==========================================
-    BOOKS PAGE
-    ========================================== -->
     <div id="booksPage" class="page-container">
         <div class="container">
             <div class="page-header">
                 <button class="btn-back" onclick="showPage('homePage')"><i class="fas fa-arrow-left"></i> Back</button>
                 <h2><i class="fas fa-book text-gold"></i> Books</h2>
             </div>
-            <p style="opacity:0.4; font-size:14px; margin-bottom:16px;">Download PDFs and learn from expert resources</p>
+            <p style="opacity:0.4; font-size:14px; margin-bottom:16px;">Explore our library of trading knowledge</p>
 
+            <!-- Books Grid -->
             <div class="books-grid" id="booksGrid"></div>
 
-            <!-- ADMIN PANEL -->
+            <!-- Chapter View (Book Reader) -->
+            <div class="chapter-view" id="chapterView">
+                <div class="book-header">
+                    <button class="btn-back" onclick="closeChapterView()"><i class="fas fa-arrow-left"></i> Back to Books</button>
+                    <h2 id="chapterBookTitle">Basic Course for Beginners</h2>
+                    <div class="sub" id="chapterBookDesc">Complete Forex trading course for beginners.</div>
+                </div>
+                <div class="chapter-list" id="chapterList"></div>
+            </div>
+
+            <!-- Chapter Detail View -->
+            <div class="chapter-detail-view" id="chapterDetailView">
+                <div class="detail-header">
+                    <button class="btn-back" onclick="closeChapterDetail()"><i class="fas fa-arrow-left"></i> Back to Chapters</button>
+                    <div class="num" id="detailChapterNum">Chapter 1</div>
+                    <h3 id="detailChapterTitle">Forex Market Introduction</h3>
+                </div>
+                <div class="detail-body" id="detailChapterBody"></div>
+            </div>
+
+            <!-- Admin Panel -->
             <div class="admin-panel" id="adminPanel">
                 <h3><i class="fas fa-lock text-gold"></i> Admin Panel</h3>
                 <p class="admin-sub">Manage Books · Trading Journey · Social Media</p>
@@ -1023,16 +1156,16 @@
                 <div style="margin-bottom:16px;">
                     <h4 style="font-size:16px; margin-bottom:8px;">📚 Books Management</h4>
                     <div class="admin-grid">
-                        <button class="admin-btn" id="adminShowBookForm"><i class="fas fa-plus-circle"></i> Add Book</button>
-                        <button class="admin-btn danger" id="adminDeleteAllBooks"><i class="fas fa-trash"></i> Delete All</button>
+                        <button class="admin-btn" id="adminShowBookForm"><i class="fas fa-plus-circle"></i> Add PDF Book</button>
+                        <button class="admin-btn danger" id="adminDeleteAllBooks"><i class="fas fa-trash"></i> Delete All PDF Books</button>
                     </div>
                     <div class="admin-form" id="adminBookForm">
                         <label>Book Name *</label>
                         <input type="text" id="bookNameInput" placeholder="Enter book name" />
                         <label>Book Description *</label>
                         <textarea id="bookDescInput" placeholder="Enter book description"></textarea>
-                        <label>Upload PDF</label>
-                        <input type="file" id="bookPdfInput" accept=".pdf" />
+                        <label>Upload PDF *</label>
+                        <input type="file" id="bookPdfInput" accept=".pdf" required />
                         <div class="form-actions">
                             <button class="btn-primary" id="submitBookBtn" style="padding:10px 24px; font-size:14px;"><i class="fas fa-upload"></i> Upload Book</button>
                             <button class="btn-secondary" id="cancelBookBtn" style="padding:10px 24px; font-size:14px;">Cancel</button>
@@ -1075,9 +1208,6 @@
         </div>
     </div>
 
-    <!-- ==========================================
-    TRADING JOURNEY PAGE
-    ========================================== -->
     <div id="journeyPage" class="page-container">
         <div class="container">
             <div class="page-header">
@@ -1085,14 +1215,10 @@
                 <h2><i class="fas fa-road text-gold"></i> Trading Journey</h2>
             </div>
             <p style="opacity:0.4; font-size:14px; margin-bottom:16px;">Follow the trading journey of our community</p>
-
             <div class="journey-feed" id="journeyFeed"></div>
         </div>
     </div>
 
-    <!-- ==========================================
-    SOCIAL MEDIA PAGE
-    ========================================== -->
     <div id="socialPage" class="page-container">
         <div class="container">
             <div class="page-header">
@@ -1104,9 +1230,6 @@
         </div>
     </div>
 
-    <!-- ==========================================
-    SIGNALS PAGE
-    ========================================== -->
     <div id="signalPage" class="page-container">
         <div class="container">
             <div class="page-header">
@@ -1130,9 +1253,6 @@
         </div>
     </div>
 
-    <!-- ==========================================
-    COMMUNITY PAGE
-    ========================================== -->
     <div id="communityPage" class="page-container">
         <div class="container">
             <div class="page-header">
@@ -1159,7 +1279,6 @@
         </div>
     </div>
 
-    <!-- ===== FOOTER ===== -->
     <footer class="footer">
         <div class="container">
             <div class="footer-inner">
@@ -1174,14 +1293,10 @@
         </div>
     </footer>
 
-    <!-- ==========================================
-    JAVASCRIPT
-    ========================================== -->
     <script>
         (function() {
             'use strict';
 
-            // ===== PAGE NAVIGATION =====
             function showPage(pageId) {
                 document.querySelectorAll('.page-container').forEach(p => p.classList.remove('active'));
                 document.getElementById(pageId).classList.add('active');
@@ -1189,7 +1304,6 @@
             }
             window.showPage = showPage;
 
-            // ===== THEME =====
             const themeToggle = document.getElementById('themeToggle');
             const body = document.body;
             if (localStorage.getItem('efi-theme') === 'light') {
@@ -1203,7 +1317,6 @@
                     '<i class="fas fa-moon"></i>';
             });
 
-            // ===== LANGUAGE =====
             let lang = localStorage.getItem('efi-lang') || 'EN';
             document.getElementById('langToggle').textContent = lang;
             document.getElementById('langToggle').addEventListener('click', function() {
@@ -1214,9 +1327,6 @@
                 showNotification('Language: ' + lang);
             });
 
-            // ==========================================
-            // ADMIN PANEL - 3 TAPS ON LOGO
-            // ==========================================
             let adminUnlocked = false;
             const adminPanel = document.getElementById('adminPanel');
             const adminStatus = document.getElementById('adminStatus');
@@ -1259,9 +1369,6 @@
                 }
             });
 
-            // ==========================================
-            // SOCIAL MEDIA
-            // ==========================================
             const socialLinks = [
                 { id: 1, name: 'YouTube', icon: 'fab fa-youtube', color: '#FF0000',
                     url: 'https://www.youtube.com/@ozi1001ozi', handle: '@ozi1001ozi' },
@@ -1287,14 +1394,11 @@
             }
             renderSocial();
 
-            // ==========================================
-            // ADMIN SOCIAL
-            // ==========================================
             function renderAdminSocial() {
                 const container = document.getElementById('adminSocialList');
                 if (!adminUnlocked) {
                     container.innerHTML =
-                    '<p style="opacity:0.3; font-size:13px;">🔒 Unlock admin to manage social links</p>';
+                        '<p style="opacity:0.3; font-size:13px;">🔒 Unlock admin to manage social links</p>';
                     return;
                 }
                 container.innerHTML = socialLinks.map(s => `
@@ -1367,87 +1471,257 @@
             });
 
             // ==========================================
-            // BOOKS - SEPARATE CARDS
+            // DEFAULT BUILT-IN BOOK (21 Chapters, NO PDF)
             // ==========================================
-            let books = [];
+            const defaultBook = {
+                id: 'default_1',
+                title: 'Basic Course for Beginners',
+                description: 'Complete Forex trading course for beginners. Learn from basics to advanced strategies. This book covers 21 essential topics including Forex introduction, Gold trading, brokers, platforms, candlesticks, timeframes, orders, risk management, and more.',
+                isDefault: true,
+                chapters: [
+                    { title: 'Forex Market Introduction',
+                        desc: 'Forex (Foreign Exchange) is the world\'s largest financial market where people buy and sell currencies to make a profit. The market is open 24 hours a day, Monday to Friday. Banks, companies, and traders trade every day. Prices change because of supply, demand, and economic news.',
+                        example: 'If you buy EUR/USD at 1.1000 and the price goes to 1.1050, you can make a profit.' },
+                    { title: 'Gold (XAUUSD) Introduction',
+                        desc: 'Gold is one of the most popular trading assets. Its symbol is XAU/USD, which means Gold against the US Dollar. Gold prices move because of economic news, inflation, interest rates, and market demand. Many traders choose Gold because it has strong price movements.',
+                        example: 'Buy Gold at 3400 and sell at 3410 to make a profit if the price goes up.' },
+                    { title: 'Broker & Trading Account',
+                        desc: 'A broker is a company that allows you to trade in the Forex market. You need a trading account to place buy and sell orders. Choose a trusted and regulated broker for safety. Before trading with real money, you can practice on a demo account.',
+                        example: 'Open an account with a broker, deposit money, and start trading on MT5.' },
+                    { title: 'Trading Platform (MT4 / MT5)',
+                        desc: 'MT4 and MT5 are trading platforms used to analyze charts and place trades. MT5 has more tools, more timeframes, and more features than MT4. Both platforms are beginner-friendly and easy to use.',
+                        example: 'Open the Gold (XAUUSD) chart, analyze it, and place a Buy or Sell order.' },
+                    { title: 'Candlestick Basics',
+                        desc: 'A candlestick shows how the price moved during a specific time. Every candle has four prices: Open, High, Low, Close. A green candle means the price closed higher than it opened. A red candle means the price closed lower than it opened.',
+                        example: '' },
+                    { title: 'Timeframes',
+                        desc: 'A timeframe shows how much time one candle represents. Different timeframes are used for different trading styles. Common Timeframes: M1 = 1 Minute, M5 = 5 Minutes, M15 = 15 Minutes, H1 = 1 Hour, H4 = 4 Hours, D1 = 1 Day.',
+                        example: 'Scalpers often use M1 or M5, while swing traders use H4 or D1.' },
+                    { title: 'Buy & Sell Orders',
+                        desc: 'A Buy order is placed when you think the price will go up. A Sell order is placed when you think the price will go down. Profit depends on the market moving in the direction you expected.',
+                        example: 'Buy Gold at 3400 → Price goes to 3410 → Profit. Sell Gold at 3400 → Price goes to 3390 → Profit.' },
+                    { title: 'Bid, Ask & Spread',
+                        desc: 'Bid Price is the price at which you can sell. Ask Price is the price at which you can buy. The difference between the Bid and Ask price is called the Spread. Spread is the broker\'s trading cost.',
+                        example: 'Bid = 3400.20, Ask = 3400.50, Spread = 0.30' },
+                    { title: 'Lot Size',
+                        desc: 'A Lot Size is the size of your trade. It decides how much money you are trading. A bigger lot size means higher profit, but it also means higher risk. Common Lot Sizes: 0.01 = Micro Lot, 0.10 = Mini Lot, 1.00 = Standard Lot.',
+                        example: 'A 0.01 lot is safer for beginners than a 1.00 lot.' },
+                    { title: 'Pip & Point',
+                        desc: 'A Pip is a small price movement in Forex. A Point is an even smaller price movement. Traders use pips and points to measure profit and loss.',
+                        example: 'If EUR/USD moves from 1.1000 to 1.1010, it moves 10 pips.' },
+                    { title: 'Leverage',
+                        desc: 'Leverage allows you to control a larger trade with a smaller amount of money. It can increase both profit and loss, so it should be used carefully.',
+                        example: 'With 1:100 leverage, you can control a larger trade using less money.' },
+                    { title: 'Margin & Free Margin',
+                        desc: 'Margin is the money your broker holds to keep your trade open. Free Margin is the money left in your account that can be used for new trades.',
+                        example: 'If your account balance is $100 and $20 is used as margin, then your Free Margin is $80.' },
+                    { title: 'Equity & Balance',
+                        desc: 'Balance is the money in your account when no trade is open. Equity is your account value after adding floating profit or loss.',
+                        example: 'Balance = $100, Open Trade Profit = $10, Equity = $110' },
+                    { title: 'Stop Loss (SL)',
+                        desc: 'A Stop Loss (SL) is a price level where your trade will close automatically to limit your loss. Every trader should use a Stop Loss to protect their account.',
+                        example: 'You buy Gold at 3400 and set the Stop Loss at 3395. If the price falls to 3395, the trade closes automatically with a limited loss.' },
+                    { title: 'Take Profit (TP)',
+                        desc: 'Take Profit (TP) is a price level where your trade closes automatically after reaching your profit target. It helps you secure your profit without watching the chart all the time.',
+                        example: 'You buy Gold at 3400 and set Take Profit at 3410. When the price reaches 3410, your trade closes with profit.' },
+                    { title: 'Risk Management Basics',
+                        desc: 'Risk Management means protecting your trading account from big losses. Never risk too much money on one trade. Beginners should use a small lot size and always set a Stop Loss. Basic Rule: Never risk more than 1%–2% of your account on a single trade.',
+                        example: '' },
+                    { title: 'Support & Resistance',
+                        desc: 'Support is a price level where the market often stops falling and may move up. Resistance is a price level where the market often stops rising and may move down. Traders use these levels to find possible Buy and Sell entries.',
+                        example: 'If Gold reaches a strong support level, the price may bounce up.' },
+                    { title: 'Trend (Uptrend, Downtrend, Sideways)',
+                        desc: 'A Trend shows the overall direction of the market. Uptrend: Price is making higher highs and higher lows. Downtrend: Price is making lower highs and lower lows. Sideways: Price moves in a range without a clear direction.',
+                        example: 'Trading with the trend is usually safer than trading against it.' },
+                    { title: 'Trendlines',
+                        desc: 'A Trendline is a straight line drawn on the chart to show the market direction. Draw it below the price in an Uptrend. Draw it above the price in a Downtrend. Trendlines help traders find entry, exit, and possible reversal points.',
+                        example: '' },
+                    { title: 'Basic Chart Patterns',
+                        desc: 'Chart patterns help traders predict possible market movements. Common Patterns: Double Top, Double Bottom, Head and Shoulders, Triangle. These patterns can show trend continuation or reversal.',
+                        example: '' },
+                    { title: 'Basic Candlestick Patterns',
+                        desc: 'Candlestick patterns help traders understand buyer and seller strength. Common Patterns: Doji, Hammer, Shooting Star, Bullish Engulfing, Bearish Engulfing. These patterns are more reliable when they appear near Support or Resistance.',
+                        example: '' }
+                ]
+            };
+
+            let pdfBooks = []; // Only admin uploaded PDF books
+
             const booksGrid = document.getElementById('booksGrid');
 
             function renderBooks() {
-                if (books.length === 0) {
+                const allBooks = [defaultBook, ...pdfBooks];
+
+                if (allBooks.length === 0) {
                     booksGrid.innerHTML = `
                             <div style="grid-column: span 1; text-align:center; padding:40px; opacity:0.25; border:1px dashed rgba(201,168,76,0.1); border-radius:var(--radius);">
                                 <i class="fas fa-book" style="font-size:40px; display:block; margin-bottom:12px;"></i>
-                                No books available. Admin can upload one.
+                                No books available.
                             </div>
                         `;
                     return;
                 }
 
-                booksGrid.innerHTML = books.map((book, index) => `
-                        <div class="book-card ${adminUnlocked ? '' : 'admin-hidden'}">
-                            <div class="book-icon"><i class="fas fa-book-open"></i></div>
-                            <div class="book-title">${book.title}</div>
-                            <div class="book-desc">${book.description || 'No description provided.'}</div>
-                            <div class="book-meta"><i class="far fa-file-pdf"></i> PDF • ${book.pdf ? book.pdf : 'No PDF attached'}</div>
-                            <div class="book-actions">
-                                ${book.pdfData ? `<a href="${book.pdfData}" target="_blank" class="pdf-btn"><i class="fas fa-download"></i> Download PDF</a>` : '<span style="opacity:0.2; font-size:13px;">No PDF</span>'}
-                                ${adminUnlocked ? `<button class="delete-btn" data-index="${index}"><i class="fas fa-trash"></i></button>` : ''}
+                booksGrid.innerHTML = allBooks.map((book, index) => {
+                    const isDefault = book.isDefault === true;
+                    return `
+                            <div class="book-card ${adminUnlocked ? '' : 'admin-hidden'}">
+                                ${isDefault ? '<div class="book-badge"><i class="fas fa-star"></i> Built-in</div>' : ''}
+                                <div class="book-icon"><i class="fas ${isDefault ? 'fa-book-open' : 'fa-file-pdf'}"></i></div>
+                                <div class="book-title">${book.title}</div>
+                                <div class="book-desc">${book.description || 'No description provided.'}</div>
+                                ${isDefault ? `<div style="opacity:0.3; font-size:12px; margin-bottom:8px;"><i class="far fa-file-alt"></i> ${book.chapters.length} chapters</div>` : ''}
+                                <div class="book-meta">
+                                    ${isDefault ? '📖 Built-in course' : '📄 PDF Book'}
+                                </div>
+                                <div class="book-actions">
+                                    ${isDefault ? 
+                                        `<button class="open-btn" onclick="openDefaultBook()"><i class="fas fa-book-reader"></i> Read Book</button>` :
+                                        (book.pdfData ? `<a href="${book.pdfData}" target="_blank" class="pdf-btn"><i class="fas fa-download"></i> Download PDF</a>` : '<span style="opacity:0.2; font-size:13px;">No PDF</span>')
+                                    }
+                                    ${!isDefault && adminUnlocked ? `<button class="delete-btn" data-index="${index - 1}"><i class="fas fa-trash"></i></button>` : ''}
+                                </div>
                             </div>
-                        </div>
-                    `).join('');
+                        `;
+                }).join('');
 
-                // Delete event
+                // Delete only for PDF books
                 document.querySelectorAll('.delete-btn').forEach(btn => {
                     btn.addEventListener('click', function() {
                         if (!adminUnlocked) { showNotification('🔒 Admin locked'); return; }
                         const idx = parseInt(this.dataset.index);
-                        if (confirm('Delete this book?')) {
-                            books.splice(idx, 1);
-                            saveBooks();
+                        if (confirm('Delete this PDF book?')) {
+                            pdfBooks.splice(idx, 1);
+                            savePDFBooks();
                             renderBooks();
-                            showNotification('Book deleted');
+                            showNotification('PDF Book deleted');
                         }
                     });
                 });
             }
 
-            function saveBooks() {
-                localStorage.setItem('efi_books', JSON.stringify(books));
+            // ==========================================
+            // OPEN DEFAULT BOOK (In-App Reader)
+            // ==========================================
+            window.openDefaultBook = function() {
+                const view = document.getElementById('chapterView');
+                const grid = document.querySelector('.books-grid');
+                const header = document.querySelector('.page-header');
+
+                // Hide grid and header
+                grid.style.display = 'none';
+                header.style.display = 'none';
+
+                // Show chapter view
+                view.classList.add('active');
+
+                // Set book info
+                document.getElementById('chapterBookTitle').textContent = defaultBook.title;
+                document.getElementById('chapterBookDesc').textContent = defaultBook.description;
+
+                // Render chapters
+                const list = document.getElementById('chapterList');
+                list.innerHTML = defaultBook.chapters.map((ch, idx) => `
+                        <div class="chapter-item" onclick="openChapterDetail(${idx})">
+                            <div class="num">Chapter ${idx + 1}</div>
+                            <div class="title">${ch.title}</div>
+                            <div class="desc">${ch.desc ? ch.desc.substring(0, 120) + (ch.desc.length > 120 ? '...' : '') : ''}</div>
+                            ${ch.example ? `<div class="example"><i class="fas fa-lightbulb"></i> ${ch.example}</div>` : ''}
+                        </div>
+                    `).join('');
+
+                // Close admin panel if open
+                adminPanel.classList.remove('active');
+
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            };
+
+            window.closeChapterView = function() {
+                const view = document.getElementById('chapterView');
+                const grid = document.querySelector('.books-grid');
+                const header = document.querySelector('.page-header');
+
+                view.classList.remove('active');
+                grid.style.display = 'grid';
+                header.style.display = 'flex';
+                document.getElementById('chapterDetailView').classList.remove('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            };
+
+            // ==========================================
+            // OPEN CHAPTER DETAIL
+            // ==========================================
+            window.openChapterDetail = function(index) {
+                const ch = defaultBook.chapters[index];
+                if (!ch) return;
+
+                const detailView = document.getElementById('chapterDetailView');
+                const chapterView = document.getElementById('chapterView');
+
+                // Hide chapter list, show detail
+                chapterView.querySelector('.chapter-list').style.display = 'none';
+                detailView.classList.add('active');
+
+                document.getElementById('detailChapterNum').textContent = 'Chapter ' + (index + 1);
+                document.getElementById('detailChapterTitle').textContent = ch.title;
+
+                let bodyHTML = `
+                        <div class="section">
+                            <span class="label">📘 Description</span>
+                            <div class="value">${ch.desc || 'No description available.'}</div>
+                        </div>
+                    `;
+                if (ch.example) {
+                    bodyHTML += `
+                            <div class="section">
+                                <span class="label">💡 Example</span>
+                                <div class="example-box">${ch.example}</div>
+                            </div>
+                        `;
+                }
+                document.getElementById('detailChapterBody').innerHTML = bodyHTML;
+
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            };
+
+            window.closeChapterDetail = function() {
+                const detailView = document.getElementById('chapterDetailView');
+                const chapterView = document.getElementById('chapterView');
+
+                detailView.classList.remove('active');
+                chapterView.querySelector('.chapter-list').style.display = 'flex';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            };
+
+            // ==========================================
+            // PDF BOOKS (Admin Uploaded)
+            // ==========================================
+            function savePDFBooks() {
+                localStorage.setItem('efi_pdf_books', JSON.stringify(pdfBooks));
             }
 
-            function loadBooks() {
-                const saved = localStorage.getItem('efi_books');
+            function loadPDFBooks() {
+                const saved = localStorage.getItem('efi_pdf_books');
                 if (saved) {
-                    try { books = JSON.parse(saved); } catch (e) { books = []; }
-                }
-                if (books.length === 0) {
-                    // Default book
-                    books.push({
-                        id: Date.now(),
-                        title: 'Beginner Forex Course',
-                        description: 'Complete Forex trading course for beginners. Learn from basics to advanced strategies.',
-                        pdf: 'Beginner_Forex_Course.pdf',
-                        pdfData: null
-                    });
-                    saveBooks();
+                    try { pdfBooks = JSON.parse(saved); } catch (e) { pdfBooks = []; }
                 }
                 renderBooks();
             }
-            loadBooks();
+            loadPDFBooks();
 
             // ==========================================
-            // ADMIN: ADD BOOK - Name → Description → PDF
+            // ADMIN: ADD PDF BOOK
             // ==========================================
             const bookForm = document.getElementById('adminBookForm');
             document.getElementById('adminShowBookForm').addEventListener('click', function() {
                 if (!adminUnlocked) { showNotification('🔒 Admin locked'); return; }
                 bookForm.classList.toggle('active');
-                this.textContent = bookForm.classList.contains('active') ? 'Hide Form' : 'Add Book';
+                this.textContent = bookForm.classList.contains('active') ? 'Hide Form' : 'Add PDF Book';
             });
 
             document.getElementById('cancelBookBtn').addEventListener('click', function() {
                 bookForm.classList.remove('active');
-                document.getElementById('adminShowBookForm').textContent = 'Add Book';
+                document.getElementById('adminShowBookForm').textContent = 'Add PDF Book';
                 document.getElementById('bookNameInput').value = '';
                 document.getElementById('bookDescInput').value = '';
                 document.getElementById('bookPdfInput').value = '';
@@ -1463,57 +1737,42 @@
 
                 if (!title) { showNotification('Please enter book name'); return; }
                 if (!description) { showNotification('Please enter book description'); return; }
+                if (!file) { showNotification('Please select a PDF file'); return; }
 
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        books.push({
-                            id: Date.now(),
-                            title: title,
-                            description: description,
-                            pdf: file.name,
-                            pdfData: e.target.result
-                        });
-                        saveBooks();
-                        renderBooks();
-                        showNotification('✅ Book "' + title + '" uploaded successfully!');
-                        bookForm.classList.remove('active');
-                        document.getElementById('adminShowBookForm').textContent = 'Add Book';
-                        document.getElementById('bookNameInput').value = '';
-                        document.getElementById('bookDescInput').value = '';
-                        document.getElementById('bookPdfInput').value = '';
-                    };
-                    reader.readAsDataURL(file);
-                } else {
-                    books.push({
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    pdfBooks.push({
                         id: Date.now(),
                         title: title,
                         description: description,
-                        pdf: null,
-                        pdfData: null
+                        pdf: file.name,
+                        pdfData: e.target.result,
+                        isDefault: false
                     });
-                    saveBooks();
+                    savePDFBooks();
                     renderBooks();
-                    showNotification('✅ Book "' + title + '" uploaded successfully!');
+                    showNotification('✅ PDF Book "' + title + '" uploaded successfully!');
                     bookForm.classList.remove('active');
-                    document.getElementById('adminShowBookForm').textContent = 'Add Book';
+                    document.getElementById('adminShowBookForm').textContent = 'Add PDF Book';
                     document.getElementById('bookNameInput').value = '';
                     document.getElementById('bookDescInput').value = '';
-                }
+                    document.getElementById('bookPdfInput').value = '';
+                };
+                reader.readAsDataURL(file);
             });
 
             document.getElementById('adminDeleteAllBooks').addEventListener('click', function() {
                 if (!adminUnlocked) { showNotification('🔒 Admin locked'); return; }
-                if (confirm('⚠️ Delete ALL books?')) {
-                    books = [];
-                    saveBooks();
+                if (confirm('⚠️ Delete ALL PDF books? (Default book will remain)')) {
+                    pdfBooks = [];
+                    savePDFBooks();
                     renderBooks();
-                    showNotification('All books deleted');
+                    showNotification('All PDF books deleted. Default book remains.');
                 }
             });
 
             // ==========================================
-            // TRADING JOURNEY - SOCIAL FEED STYLE
+            // TRADING JOURNEY
             // ==========================================
             let journeyPosts = [];
             const journeyFeed = document.getElementById('journeyFeed');
@@ -1575,9 +1834,6 @@
             }
             loadJourney();
 
-            // ==========================================
-            // ADMIN: ADD JOURNEY POST
-            // ==========================================
             const journeyForm = document.getElementById('adminJourneyForm');
             document.getElementById('adminShowJourneyForm').addEventListener('click', function() {
                 if (!adminUnlocked) { showNotification('🔒 Admin locked'); return; }
@@ -1758,8 +2014,8 @@
             // INIT
             // ==========================================
             console.log('🚀 EFI Trader · Premium Platform');
-            console.log('📚 Books: Separate cards with Name, Description, PDF Download');
-            console.log('📊 Trading Journey: Social feed style (Instagram/Facebook like)');
+            console.log('📚 Default built-in book with 21 chapters');
+            console.log('📄 PDF books: Admin upload');
             console.log('🔐 Admin: tap logo 3x · Password: efi2024');
 
             setTimeout(() => {
