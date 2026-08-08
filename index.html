@@ -1341,6 +1341,9 @@
                     document.getElementById('adminPasswordInput').value = '';
                     showNotification('✅ Admin unlocked');
                     renderAdminSocial();
+                    renderBooks();
+                    renderJourney();
+                    renderCommunity();
                 } else {
                     adminStatus.textContent = '❌ Wrong password';
                     adminStatus.style.color = '#ff6b6b';
@@ -1564,16 +1567,16 @@
                                         `<button class="open-btn" onclick="openDefaultBook()"><i class="fas fa-book-reader"></i> Read Book</button>` :
                                         (book.pdfData ? `<a href="${book.pdfData}" target="_blank" class="pdf-btn"><i class="fas fa-download"></i> Download PDF</a>` : '<span style="opacity:0.2; font-size:13px;">No PDF</span>')
                                     }
-                                    ${!isDefault ? `<button class="delete-btn" data-index="${index - 1}"><i class="fas fa-trash"></i></button>` : ''}
+                                    ${!isDefault ? `<button class="book-delete-btn" data-index="${index - 1}"><i class="fas fa-trash"></i></button>` : ''}
                                 </div>
                             </div>
                         `;
                 }).join('');
 
-                document.querySelectorAll('.delete-btn').forEach(btn => {
+                booksGrid.querySelectorAll('.book-delete-btn').forEach(btn => {
                     btn.addEventListener('click', function() {
                         if (!adminUnlocked) { showNotification('🔒 Admin locked'); return; }
-                        const idx = parseInt(this.dataset.index);
+                        const idx = parseInt(this.dataset.index, 10);
                         if (confirm('Delete this PDF book?')) {
                             pdfBooks.splice(idx, 1);
                             savePDFBooks();
@@ -1666,13 +1669,25 @@
             };
 
             function savePDFBooks() {
-                localStorage.setItem('efi_pdf_books', JSON.stringify(pdfBooks));
+                try {
+                    localStorage.setItem('efi_pdf_books', JSON.stringify(pdfBooks));
+                    return true;
+                } catch (e) {
+                    console.error('❌ Failed to save PDF books:', e);
+                    showNotification('⚠️ Could not save book (storage full). Try a smaller PDF.');
+                    return false;
+                }
             }
 
             function loadPDFBooks() {
                 const saved = localStorage.getItem('efi_pdf_books');
                 if (saved) {
-                    try { pdfBooks = JSON.parse(saved); } catch (e) { pdfBooks = []; }
+                    try {
+                        const parsed = JSON.parse(saved);
+                        pdfBooks = Array.isArray(parsed) ? parsed : [];
+                    } catch (e) { pdfBooks = []; }
+                } else {
+                    pdfBooks = [];
                 }
                 renderBooks();
             }
@@ -1705,6 +1720,9 @@
                 if (!description) { showNotification('Please enter book description'); return; }
                 if (!file) { showNotification('Please select a PDF file'); return; }
 
+                const submitBtn = this;
+                submitBtn.disabled = true;
+
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     pdfBooks.push({
@@ -1723,6 +1741,11 @@
                     document.getElementById('bookNameInput').value = '';
                     document.getElementById('bookDescInput').value = '';
                     document.getElementById('bookPdfInput').value = '';
+                    submitBtn.disabled = false;
+                };
+                reader.onerror = function() {
+                    showNotification('⚠️ Could not read the PDF file. Please try again.');
+                    submitBtn.disabled = false;
                 };
                 reader.readAsDataURL(file);
             });
@@ -1770,15 +1793,15 @@
                             <div class="post-actions">
                                 <button><i class="far fa-heart"></i> Like</button>
                                 <button><i class="far fa-comment"></i> Comment</button>
-                                ${adminUnlocked ? `<button class="delete-btn" data-index="${index}"><i class="fas fa-trash"></i> Delete</button>` : ''}
+                                ${adminUnlocked ? `<button class="journey-delete-btn" data-index="${index}"><i class="fas fa-trash"></i> Delete</button>` : ''}
                             </div>
                         </div>
                     `).join('');
 
-                document.querySelectorAll('.delete-btn').forEach(btn => {
+                journeyFeed.querySelectorAll('.journey-delete-btn').forEach(btn => {
                     btn.addEventListener('click', function() {
                         if (!adminUnlocked) { showNotification('🔒 Admin locked'); return; }
-                        const idx = parseInt(this.dataset.index);
+                        const idx = parseInt(this.dataset.index, 10);
                         if (confirm('Delete this post?')) {
                             journeyPosts.splice(idx, 1);
                             saveJourney();
@@ -1790,21 +1813,28 @@
             }
 
             function saveJourney() {
-                localStorage.setItem('efi_journey', JSON.stringify(journeyPosts));
+                try {
+                    localStorage.setItem('efi_journey', JSON.stringify(journeyPosts));
+                    return true;
+                } catch (e) {
+                    console.error('❌ Failed to save journey post:', e);
+                    showNotification('⚠️ Could not save post (storage full). Try a smaller image.');
+                    return false;
+                }
             }
 
             function loadJourney() {
                 const saved = localStorage.getItem('efi_journey');
                 if (saved) {
-                    try { 
-                        journeyPosts = JSON.parse(saved); 
+                    try {
+                        const parsed = JSON.parse(saved);
+                        journeyPosts = Array.isArray(parsed) ? parsed : [];
                         console.log('✅ Journey posts loaded:', journeyPosts.length);
-                    } catch (e) { 
-                        journeyPosts = []; 
+                    } catch (e) {
+                        journeyPosts = [];
                     }
                 } else {
                     journeyPosts = [];
-                    saveJourney();
                 }
                 renderJourney();
             }
@@ -1832,6 +1862,17 @@
 
                 if (!description) { showNotification('Please write a description'); return; }
 
+                const submitBtn = this;
+                submitBtn.disabled = true;
+
+                function finishPost() {
+                    document.getElementById('adminShowJourneyForm').textContent = 'Add Post';
+                    document.getElementById('journeyDescInput').value = '';
+                    document.getElementById('journeyImageInput').value = '';
+                    journeyForm.classList.remove('active');
+                    submitBtn.disabled = false;
+                }
+
                 if (file) {
                     const reader = new FileReader();
                     reader.onload = function(e) {
@@ -1844,10 +1885,11 @@
                         saveJourney();
                         renderJourney();
                         showNotification('✅ Journey post published!');
-                        journeyForm.classList.remove('active');
-                        document.getElementById('adminShowJourneyForm').textContent = 'Add Post';
-                        document.getElementById('journeyDescInput').value = '';
-                        document.getElementById('journeyImageInput').value = '';
+                        finishPost();
+                    };
+                    reader.onerror = function() {
+                        showNotification('⚠️ Could not read the image. Please try again.');
+                        submitBtn.disabled = false;
                     };
                     reader.readAsDataURL(file);
                 } else {
@@ -1860,9 +1902,7 @@
                     saveJourney();
                     renderJourney();
                     showNotification('✅ Journey post published!');
-                    journeyForm.classList.remove('active');
-                    document.getElementById('adminShowJourneyForm').textContent = 'Add Post';
-                    document.getElementById('journeyDescInput').value = '';
+                    finishPost();
                 }
             });
 
@@ -1894,7 +1934,7 @@
                 communityPostsEl.innerHTML = communityPosts.map((post, index) => `
                         <div class="community-post-item">
                             <div class="post-header">
-                                <div class="post-avatar">${post.author.charAt(0).toUpperCase()}</div>
+                                <div class="post-avatar">${(post.author || 'T').charAt(0).toUpperCase()}</div>
                                 <span class="post-author">${post.author}</span>
                                 <span class="post-time">${post.time}</span>
                             </div>
@@ -1903,10 +1943,10 @@
                         </div>
                     `).join('');
 
-                document.querySelectorAll('.delete-community-post').forEach(btn => {
+                communityPostsEl.querySelectorAll('.delete-community-post').forEach(btn => {
                     btn.addEventListener('click', function() {
                         if (!adminUnlocked) { showNotification('🔒 Admin locked'); return; }
-                        const idx = parseInt(this.dataset.index);
+                        const idx = parseInt(this.dataset.index, 10);
                         if (confirm('Delete this post?')) {
                             communityPosts.splice(idx, 1);
                             saveCommunity();
@@ -1918,21 +1958,28 @@
             }
 
             function saveCommunity() {
-                localStorage.setItem('efi_community', JSON.stringify(communityPosts));
+                try {
+                    localStorage.setItem('efi_community', JSON.stringify(communityPosts));
+                    return true;
+                } catch (e) {
+                    console.error('❌ Failed to save community post:', e);
+                    showNotification('⚠️ Could not save post (storage full).');
+                    return false;
+                }
             }
 
             function loadCommunity() {
                 const saved = localStorage.getItem('efi_community');
                 if (saved) {
-                    try { 
-                        communityPosts = JSON.parse(saved); 
+                    try {
+                        const parsed = JSON.parse(saved);
+                        communityPosts = Array.isArray(parsed) ? parsed : [];
                         console.log('✅ Community posts loaded:', communityPosts.length);
-                    } catch (e) { 
-                        communityPosts = []; 
+                    } catch (e) {
+                        communityPosts = [];
                     }
                 } else {
                     communityPosts = [];
-                    saveCommunity();
                 }
                 renderCommunity();
             }
@@ -1997,6 +2044,24 @@
             }
 
             // ============================================================
+            // RE-RENDER ON TAB SWITCH (belt-and-braces, in case data
+            // changed in another tab/window via localStorage)
+            // ============================================================
+            const originalShowPage = showPage;
+            window.showPage = function(pageId) {
+                originalShowPage(pageId);
+                if (pageId === 'booksPage') renderBooks();
+                if (pageId === 'journeyPage') renderJourney();
+                if (pageId === 'communityPage') renderCommunity();
+            };
+
+            window.addEventListener('storage', function(e) {
+                if (e.key === 'efi_pdf_books') { loadPDFBooks(); }
+                if (e.key === 'efi_journey') { loadJourney(); }
+                if (e.key === 'efi_community') { loadCommunity(); }
+            });
+
+            // ============================================================
             // INIT
             // ============================================================
             console.log('🚀 EFI Trader · Premium Platform');
@@ -2008,22 +2073,6 @@
             loadJourney();
             loadCommunity();
             loadPDFBooks();
-
-            // Force render on tab switch
-            document.querySelectorAll('.nav-tab').forEach(tab => {
-                tab.addEventListener('click', function() {
-                    const target = this.dataset.tab;
-                    if (target === 'journey') {
-                        setTimeout(loadJourney, 100);
-                    }
-                    if (target === 'community') {
-                        setTimeout(loadCommunity, 100);
-                    }
-                    if (target === 'books') {
-                        setTimeout(loadPDFBooks, 100);
-                    }
-                });
-            });
 
             setTimeout(() => {
                 showNotification('✨ Welcome to EFI Trader — Trade with Knowledge, Not Emotions');
